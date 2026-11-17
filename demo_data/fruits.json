@@ -1,0 +1,46 @@
+[
+  {
+    "fruitId": "banana",
+    "nameVi": "Chuối Cavendish",
+    "shelfRefDays": 10,
+    "refTempC": 14.0,
+    "q10": 2.3,
+    "optimalTempMinC": 13.0,
+    "optimalTempMaxC": 15.0,
+    "alertTempC": 18.0,
+    "optimalHumidityPct": 90
+  },
+  {
+    "fruitId": "mango",
+    "nameVi": "Xoài cát Hòa Lộc",
+    "shelfRefDays": 14,
+    "refTempC": 13.0,
+    "q10": 2.5,
+    "optimalTempMinC": 12.0,
+    "optimalTempMaxC": 14.0,
+    "alertTempC": 17.0,
+    "optimalHumidityPct": 88
+  },
+  {
+    "fruitId": "dragonfruit",
+    "nameVi": "Thanh long ruột đỏ",
+    "shelfRefDays": 14,
+    "refTempC": 10.0,
+    "q10": 2.2,
+    "optimalTempMinC": 8.0,
+    "optimalTempMaxC": 12.0,
+    "alertTempC": 15.0,
+    "optimalHumidityPct": 85
+  },
+  {
+    "fruitId": "strawberry",
+    "nameVi": "Dâu tây Đà Lạt",
+    "shelfRefDays": 7,
+    "refTempC": 2.0,
+    "q10": 3.0,
+    "optimalTempMinC": 0.0,
+    "optimalTempMaxC": 4.0,
+    "alertTempC": 8.0,
+    "optimalHumidityPct": 90
+  }
+]

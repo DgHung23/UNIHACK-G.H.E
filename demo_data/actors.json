@@ -1,0 +1,98 @@
+[
+  {
+    "actorId": "F001",
+    "name": "HTX Xoài Cao Lãnh",
+    "role": "FARMER",
+    "province": "Đồng Tháp",
+    "lat": 10.46,
+    "lon": 105.633
+  },
+  {
+    "actorId": "F002",
+    "name": "Hợp tác xã Chuối Châu Thành",
+    "role": "FARMER",
+    "province": "Long An",
+    "lat": 10.45,
+    "lon": 106.4
+  },
+  {
+    "actorId": "F003",
+    "name": "Nông trại Thanh long Hàm Thuận Nam",
+    "role": "FARMER",
+    "province": "Bình Thuận",
+    "lat": 10.85,
+    "lon": 107.9
+  },
+  {
+    "actorId": "F004",
+    "name": "Trang trại Dâu tây Đà Lạt Xanh",
+    "role": "FARMER",
+    "province": "Lâm Đồng",
+    "lat": 11.9404,
+    "lon": 108.4583
+  },
+  {
+    "actorId": "W001",
+    "name": "Kho lạnh Cần Thơ",
+    "role": "WAREHOUSE",
+    "province": "Cần Thơ",
+    "lat": 10.0452,
+    "lon": 105.7469
+  },
+  {
+    "actorId": "W002",
+    "name": "Kho lạnh Tân Bình",
+    "role": "WAREHOUSE",
+    "province": "TP.HCM",
+    "lat": 10.801,
+    "lon": 106.652
+  },
+  {
+    "actorId": "T001",
+    "name": "Vận tải lạnh Mekong (xe 51C-123.45)",
+    "role": "TRANSPORT",
+    "province": "TP.HCM",
+    "lat": null,
+    "lon": null
+  },
+  {
+    "actorId": "T002",
+    "name": "Đà Lạt Express Cold Chain (xe 49C-678.90)",
+    "role": "TRANSPORT",
+    "province": "Lâm Đồng",
+    "lat": null,
+    "lon": null
+  },
+  {
+    "actorId": "D001",
+    "name": "Trung tâm phân phối Bình Chánh",
+    "role": "DISTRIBUTOR",
+    "province": "TP.HCM",
+    "lat": 10.674,
+    "lon": 106.57
+  },
+  {
+    "actorId": "R001",
+    "name": "Siêu thị FreshMart Quận 7",
+    "role": "RETAILER",
+    "province": "TP.HCM",
+    "lat": 10.734,
+    "lon": 106.722
+  },
+  {
+    "actorId": "R002",
+    "name": "Siêu thị GreenMart Quận 1",
+    "role": "RETAILER",
+    "province": "TP.HCM",
+    "lat": 10.7769,
+    "lon": 106.7009
+  },
+  {
+    "actorId": "A001",
+    "name": "Chi cục Quản lý chất lượng NLTS (demo)",
+    "role": "REGULATOR",
+    "province": "TP.HCM",
+    "lat": null,
+    "lon": null
+  }
+]

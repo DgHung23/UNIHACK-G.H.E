@@ -1,0 +1,22 @@
+__pycache__/
+*.pyc
+.venv/
+backend/*.db
+backend/*.db-*
+backend/*-test-run.log
+backend/*-test-results.xml
+.pytest_cache/
+backend/storage/
+backend/.env
+contracts/.env
+frontend/node_modules/
+frontend/dist/
+contracts/node_modules/
+contracts/artifacts/
+contracts/cache/
+contracts/typechain-types/
+
+# build/cache
+frontend/*.tsbuildinfo
+# dữ liệu demo cục bộ (không đưa lên repo)
+.local/

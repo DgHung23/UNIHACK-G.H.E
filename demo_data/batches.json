@@ -1,0 +1,177 @@
+[
+  {
+    "batchId": "FC-2026-001",
+    "fruitId": "mango",
+    "productName": "Xoài cát Hòa Lộc",
+    "variety": "Xoài cát Hòa Lộc",
+    "farmId": "F001",
+    "originProvince": "Đồng Tháp",
+    "quantityKg": 500,
+    "harvestTs": "2026-11-12T00:00:00Z",
+    "certifications": [
+      "VietGAP"
+    ],
+    "status": "IN_STORE",
+    "currentActorId": "R001",
+    "currentLat": 10.734,
+    "currentLon": 106.722,
+    "latestRul": {
+      "ts": "2026-11-17T05:00:00Z",
+      "rulDaysAtCurrent": 7.8,
+      "rulDaysAtOptimal": 7.73,
+      "ciLowDays": 6.63,
+      "ciHighDays": 8.97,
+      "freshness": "FRESH",
+      "fractionUsed": 0.4481
+    },
+    "metadataHash": "fe12338a52fba855a53fefc4551cb53d8ccc72d3057f31ab36cc26a31ec62a24",
+    "qrPayload": "https://fruitchain.demo/trace/FC-2026-001",
+    "demoNote": "Chuỗi lạnh tốt, không vi phạm."
+  },
+  {
+    "batchId": "FC-2026-002",
+    "fruitId": "banana",
+    "productName": "Chuối Cavendish",
+    "variety": "Chuối Cavendish",
+    "farmId": "F002",
+    "originProvince": "Long An",
+    "quantityKg": 800,
+    "harvestTs": "2026-11-13T00:00:00Z",
+    "certifications": [
+      "GlobalGAP"
+    ],
+    "status": "IN_TRANSIT",
+    "currentActorId": "T001",
+    "currentLat": 10.734,
+    "currentLon": 106.722,
+    "latestRul": {
+      "ts": "2026-11-17T05:00:00Z",
+      "rulDaysAtCurrent": 5.47,
+      "rulDaysAtOptimal": 5.42,
+      "ciLowDays": 4.65,
+      "ciHighDays": 6.29,
+      "freshness": "FRESH",
+      "fractionUsed": 0.4576
+    },
+    "metadataHash": "db8c01212e92019171e749b68378970eb58dba80cd734e773f2918102a235508",
+    "qrPayload": "https://fruitchain.demo/trace/FC-2026-002",
+    "demoNote": "Đang vận chuyển đến cửa hàng, chuỗi lạnh tốt."
+  },
+  {
+    "batchId": "FC-2026-003",
+    "fruitId": "dragonfruit",
+    "productName": "Thanh long ruột đỏ",
+    "variety": "Thanh long ruột đỏ",
+    "farmId": "F003",
+    "originProvince": "Bình Thuận",
+    "quantityKg": 600,
+    "harvestTs": "2026-11-10T00:00:00Z",
+    "certifications": [
+      "VietGAP"
+    ],
+    "status": "IN_STORE",
+    "currentActorId": "R002",
+    "currentLat": 10.7769,
+    "currentLon": 106.7009,
+    "latestRul": {
+      "ts": "2026-11-17T05:00:00Z",
+      "rulDaysAtCurrent": 4.94,
+      "rulDaysAtOptimal": 5.3,
+      "ciLowDays": 4.2,
+      "ciHighDays": 5.68,
+      "freshness": "GOOD",
+      "fractionUsed": 0.6213
+    },
+    "metadataHash": "64fd8973f373b6da718a1a2e70aa1d73c6236b003e98fc2ce5d319eb17b79830",
+    "qrPayload": "https://fruitchain.demo/trace/FC-2026-003",
+    "demoNote": "Sự cố lạnh xe T001: nhiệt độ ~24.5C trong 6 giờ -> cảnh báo vi phạm."
+  },
+  {
+    "batchId": "FC-2026-004",
+    "fruitId": "strawberry",
+    "productName": "Dâu tây Đà Lạt",
+    "variety": "Dâu tây Đà Lạt",
+    "farmId": "F004",
+    "originProvince": "Lâm Đồng",
+    "quantityKg": 120,
+    "harvestTs": "2026-11-16T00:00:00Z",
+    "certifications": [
+      "VietGAP",
+      "Hữu cơ"
+    ],
+    "status": "IN_STORE",
+    "currentActorId": "R002",
+    "currentLat": 10.7769,
+    "currentLon": 106.7009,
+    "latestRul": {
+      "ts": "2026-11-17T05:00:00Z",
+      "rulDaysAtCurrent": 1.22,
+      "rulDaysAtOptimal": 3.79,
+      "ciLowDays": 1.04,
+      "ciHighDays": 1.4,
+      "freshness": "FRESH",
+      "fractionUsed": 0.4589
+    },
+    "metadataHash": "9fd423e1ddae3dfbe41db94d70a62b278ab2f3371a31f2d4e33eb9246e8273fb",
+    "qrPayload": "https://fruitchain.demo/trace/FC-2026-004",
+    "demoNote": "Tủ trưng bày ~12C (quá ấm) -> RUL thấp, cảnh báo."
+  },
+  {
+    "batchId": "FC-2026-005",
+    "fruitId": "mango",
+    "productName": "Xoài cát Hòa Lộc",
+    "variety": "Xoài cát Hòa Lộc",
+    "farmId": "F001",
+    "originProvince": "Đồng Tháp",
+    "quantityKg": 450,
+    "harvestTs": "2026-11-05T00:00:00Z",
+    "certifications": [
+      "VietGAP"
+    ],
+    "status": "SOLD",
+    "currentActorId": "R001",
+    "currentLat": 10.734,
+    "currentLon": 106.722,
+    "latestRul": {
+      "ts": "2026-11-11T11:00:00Z",
+      "rulDaysAtCurrent": 5.55,
+      "rulDaysAtOptimal": 6.42,
+      "ciLowDays": 4.72,
+      "ciHighDays": 6.38,
+      "freshness": "GOOD",
+      "fractionUsed": 0.5411
+    },
+    "metadataHash": "8fe2bf46662aa89afed61fb36b76bb8cf8d8e7e7507d0d7eed347499769519e2",
+    "qrPayload": "https://fruitchain.demo/trace/FC-2026-005",
+    "demoNote": "Lô đã bán xong (vòng đời hoàn tất)."
+  },
+  {
+    "batchId": "FC-2026-006",
+    "fruitId": "banana",
+    "productName": "Chuối Cavendish",
+    "variety": "Chuối Cavendish",
+    "farmId": "F002",
+    "originProvince": "Long An",
+    "quantityKg": 700,
+    "harvestTs": "2026-11-12T00:00:00Z",
+    "certifications": [
+      "GlobalGAP"
+    ],
+    "status": "IN_STORE",
+    "currentActorId": "R002",
+    "currentLat": 10.7769,
+    "currentLon": 106.7009,
+    "latestRul": {
+      "ts": "2026-11-17T05:00:00Z",
+      "rulDaysAtCurrent": 3.22,
+      "rulDaysAtOptimal": 3.93,
+      "ciLowDays": 2.74,
+      "ciHighDays": 3.7,
+      "freshness": "GOOD",
+      "fractionUsed": 0.6067
+    },
+    "metadataHash": "37afc2d86499bf999861c4e18112e1efd8f2a31648716e5ce2d47ca691895ac8",
+    "qrPayload": "https://fruitchain.demo/trace/FC-2026-006",
+    "demoNote": "TAMPER DEMO: sự cố nhiệt thật (25C, 6h) bị sửa trong sensor_readings.csv -> Verify phải báo FAIL."
+  }
+]

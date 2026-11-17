@@ -1,0 +1,204 @@
+[
+  {
+    "batchId": "FC-2026-001",
+    "chainLinkIntact": true,
+    "segments": [
+      {
+        "eventId": "EV-001-02",
+        "type": "HANDOFF",
+        "onChainDataHash": "4b9b77d05a35872c9b3c9846556c4930910731e974d3f2d95d12c22b413eae55",
+        "recomputedHash": "4b9b77d05a35872c9b3c9846556c4930910731e974d3f2d95d12c22b413eae55",
+        "match": true
+      },
+      {
+        "eventId": "EV-001-03",
+        "type": "HANDOFF",
+        "onChainDataHash": "9dfad8ac4ea0374b49cbb0d19ca4884dfae1f0a1e6798d205c2cb8ed968bca93",
+        "recomputedHash": "9dfad8ac4ea0374b49cbb0d19ca4884dfae1f0a1e6798d205c2cb8ed968bca93",
+        "match": true
+      },
+      {
+        "eventId": "EV-001-04",
+        "type": "HANDOFF",
+        "onChainDataHash": "60ccc2a09529e531c8224bd74464c4aa5037dfbec99d6b7759d278f37a7c93c9",
+        "recomputedHash": "60ccc2a09529e531c8224bd74464c4aa5037dfbec99d6b7759d278f37a7c93c9",
+        "match": true
+      },
+      {
+        "eventId": "EV-001-05",
+        "type": "HANDOFF",
+        "onChainDataHash": "c11613d6c9ae26ceccf8c95b24cbab37a0a5b39b1fe09ae4776ce41baf5087c2",
+        "recomputedHash": "c11613d6c9ae26ceccf8c95b24cbab37a0a5b39b1fe09ae4776ce41baf5087c2",
+        "match": true
+      }
+    ],
+    "signatureFailureCount": 0,
+    "overall": "PASS"
+  },
+  {
+    "batchId": "FC-2026-002",
+    "chainLinkIntact": true,
+    "segments": [
+      {
+        "eventId": "EV-002-02",
+        "type": "HANDOFF",
+        "onChainDataHash": "cd782bb35911ca3a7a047171cea57cebb2962d99a2bce1d953f122734f1bc53d",
+        "recomputedHash": "cd782bb35911ca3a7a047171cea57cebb2962d99a2bce1d953f122734f1bc53d",
+        "match": true
+      },
+      {
+        "eventId": "EV-002-03",
+        "type": "HANDOFF",
+        "onChainDataHash": "1fa2212c4049ec07c01fc9065efc66ab743c2ec1d506e017fc88ec903c390486",
+        "recomputedHash": "1fa2212c4049ec07c01fc9065efc66ab743c2ec1d506e017fc88ec903c390486",
+        "match": true
+      },
+      {
+        "eventId": "EV-002-04",
+        "type": "HANDOFF",
+        "onChainDataHash": "0a912009d19f1187bb84bd27dbe81378befa873aa60f6d726d98354d35277bdd",
+        "recomputedHash": "0a912009d19f1187bb84bd27dbe81378befa873aa60f6d726d98354d35277bdd",
+        "match": true
+      }
+    ],
+    "signatureFailureCount": 0,
+    "overall": "PASS"
+  },
+  {
+    "batchId": "FC-2026-003",
+    "chainLinkIntact": true,
+    "segments": [
+      {
+        "eventId": "EV-003-02",
+        "type": "HANDOFF",
+        "onChainDataHash": "d00d1aea87a4458d2dd737f8a35d6165fd68113986f9bf9bee3cb2e8b331a925",
+        "recomputedHash": "d00d1aea87a4458d2dd737f8a35d6165fd68113986f9bf9bee3cb2e8b331a925",
+        "match": true
+      },
+      {
+        "eventId": "EV-003-03",
+        "type": "VIOLATION",
+        "onChainDataHash": "3feebd15e67ab288c32900d6c5a719ae9415eab170d3f212fa4dae3fb0326ffb",
+        "recomputedHash": "3feebd15e67ab288c32900d6c5a719ae9415eab170d3f212fa4dae3fb0326ffb",
+        "match": true
+      },
+      {
+        "eventId": "EV-003-04",
+        "type": "HANDOFF",
+        "onChainDataHash": "22d21e07f07e7cecd487658e0596fde4a8db0cf7fbb56dddb2b5bc37dd4770ea",
+        "recomputedHash": "22d21e07f07e7cecd487658e0596fde4a8db0cf7fbb56dddb2b5bc37dd4770ea",
+        "match": true
+      },
+      {
+        "eventId": "EV-003-05",
+        "type": "HANDOFF",
+        "onChainDataHash": "c8666fb72881d648f5059be9a5b8fbf4a9745821a2b90e40620e30ee14b48d0b",
+        "recomputedHash": "c8666fb72881d648f5059be9a5b8fbf4a9745821a2b90e40620e30ee14b48d0b",
+        "match": true
+      }
+    ],
+    "signatureFailureCount": 0,
+    "overall": "PASS"
+  },
+  {
+    "batchId": "FC-2026-004",
+    "chainLinkIntact": true,
+    "segments": [
+      {
+        "eventId": "EV-004-02",
+        "type": "HANDOFF",
+        "onChainDataHash": "d695a044122664c5b37c7711711f2c21163360a7b24bcb72449b9a61e7105597",
+        "recomputedHash": "d695a044122664c5b37c7711711f2c21163360a7b24bcb72449b9a61e7105597",
+        "match": true
+      },
+      {
+        "eventId": "EV-004-03",
+        "type": "HANDOFF",
+        "onChainDataHash": "c9edd42a5ba511c46c0b40bdffc886865347bd047b9e5499be9b977aba15724c",
+        "recomputedHash": "c9edd42a5ba511c46c0b40bdffc886865347bd047b9e5499be9b977aba15724c",
+        "match": true
+      },
+      {
+        "eventId": "EV-004-04",
+        "type": "VIOLATION",
+        "onChainDataHash": "e16ec7bb747de2e10461770c01230cf485f453443516aaa87d7d4ede4bc9843f",
+        "recomputedHash": "e16ec7bb747de2e10461770c01230cf485f453443516aaa87d7d4ede4bc9843f",
+        "match": true
+      }
+    ],
+    "signatureFailureCount": 0,
+    "overall": "PASS"
+  },
+  {
+    "batchId": "FC-2026-005",
+    "chainLinkIntact": true,
+    "segments": [
+      {
+        "eventId": "EV-005-02",
+        "type": "HANDOFF",
+        "onChainDataHash": "e39ff4f51e0af53fb8753967b4e1240a9cada06629048b9960ae48675cb6ca38",
+        "recomputedHash": "e39ff4f51e0af53fb8753967b4e1240a9cada06629048b9960ae48675cb6ca38",
+        "match": true
+      },
+      {
+        "eventId": "EV-005-03",
+        "type": "HANDOFF",
+        "onChainDataHash": "742f926a46e736dd4b3181b268250f57cb14225fa83fa44156b5795ba0df6244",
+        "recomputedHash": "742f926a46e736dd4b3181b268250f57cb14225fa83fa44156b5795ba0df6244",
+        "match": true
+      },
+      {
+        "eventId": "EV-005-04",
+        "type": "HANDOFF",
+        "onChainDataHash": "791114234d32c25a9f32f11079c3ce06508cb7da2f62c6199985016a7a7ccda7",
+        "recomputedHash": "791114234d32c25a9f32f11079c3ce06508cb7da2f62c6199985016a7a7ccda7",
+        "match": true
+      },
+      {
+        "eventId": "EV-005-05",
+        "type": "HANDOFF",
+        "onChainDataHash": "5799c92203ace21368532bf2a0ba0c4e2cdd88563b194777dc13987939ea4082",
+        "recomputedHash": "5799c92203ace21368532bf2a0ba0c4e2cdd88563b194777dc13987939ea4082",
+        "match": true
+      }
+    ],
+    "signatureFailureCount": 0,
+    "overall": "PASS"
+  },
+  {
+    "batchId": "FC-2026-006",
+    "chainLinkIntact": true,
+    "segments": [
+      {
+        "eventId": "EV-006-02",
+        "type": "HANDOFF",
+        "onChainDataHash": "04b07017e4b50a59627892664bbb3dca8e3a67c9dc676f07176a286d5954aa0d",
+        "recomputedHash": "04b07017e4b50a59627892664bbb3dca8e3a67c9dc676f07176a286d5954aa0d",
+        "match": true
+      },
+      {
+        "eventId": "EV-006-03",
+        "type": "VIOLATION",
+        "onChainDataHash": "a33d9522cb189e516e3918ed40b7f9c33f186ff2032b48af958438f65948a349",
+        "recomputedHash": "d8612d9e1ac568456fcb197b255daf510f27a39121d53323f2578e17adde94a9",
+        "match": false
+      },
+      {
+        "eventId": "EV-006-04",
+        "type": "HANDOFF",
+        "onChainDataHash": "7d980f23a9eb67331e4017394ece004ca7f9f4a084f91cb84129b78c44f1b026",
+        "recomputedHash": "f584896f39013114533c3295cfc2fe0e1a1fe6ad9e88ad15f2b37ec8e23314db",
+        "match": false
+      },
+      {
+        "eventId": "EV-006-05",
+        "type": "HANDOFF",
+        "onChainDataHash": "09bc040a7a69e7a60f3c91e3a42221d3c5d92c51108f5bf8aef571809925c4e6",
+        "recomputedHash": "09bc040a7a69e7a60f3c91e3a42221d3c5d92c51108f5bf8aef571809925c4e6",
+        "match": true
+      }
+    ],
+    "signatureFailureCount": 6,
+    "overall": "FAIL"
+  }
+]

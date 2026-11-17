@@ -1,0 +1,52 @@
+[
+  {
+    "alertId": "AL-001",
+    "batchId": "FC-2026-003",
+    "type": "COLD_CHAIN_VIOLATION",
+    "severity": "HIGH",
+    "ts": "2026-11-10T13:00:00Z",
+    "relatedEventId": "EV-003-03",
+    "acknowledged": false,
+    "message": "Nhiệt độ vượt 15.0°C trong 6 giờ (tối đa 25.3°C)"
+  },
+  {
+    "alertId": "AL-002",
+    "batchId": "FC-2026-006",
+    "type": "COLD_CHAIN_VIOLATION",
+    "severity": "HIGH",
+    "ts": "2026-11-12T13:00:00Z",
+    "relatedEventId": "EV-006-03",
+    "acknowledged": false,
+    "message": "Nhiệt độ vượt 18.0°C trong 6 giờ (tối đa 26.5°C)"
+  },
+  {
+    "alertId": "AL-003",
+    "batchId": "FC-2026-004",
+    "type": "COLD_CHAIN_VIOLATION",
+    "severity": "HIGH",
+    "ts": "2026-11-17T05:00:00Z",
+    "relatedEventId": "EV-004-04",
+    "acknowledged": false,
+    "message": "Nhiệt độ vượt 8.0°C trong 18 giờ (tối đa 12.8°C) - đang tiếp diễn"
+  },
+  {
+    "alertId": "AL-004",
+    "batchId": "FC-2026-004",
+    "type": "LOW_RUL",
+    "severity": "HIGH",
+    "ts": "2026-11-17T05:00:00Z",
+    "relatedEventId": null,
+    "acknowledged": false,
+    "message": "RUL còn 1.22 ngày ở điều kiện hiện tại"
+  },
+  {
+    "alertId": "AL-005",
+    "batchId": "FC-2026-006",
+    "type": "LOW_RUL",
+    "severity": "MEDIUM",
+    "ts": "2026-11-17T05:00:00Z",
+    "relatedEventId": null,
+    "acknowledged": false,
+    "message": "RUL còn 3.22 ngày ở điều kiện hiện tại"
+  }
+]

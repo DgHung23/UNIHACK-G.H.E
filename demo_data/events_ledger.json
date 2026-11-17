@@ -1,0 +1,937 @@
+{
+  "chainId": "mock-ledger",
+  "genesisHash": "0000000000000000000000000000000000000000000000000000000000000000",
+  "events": [
+    {
+      "batchId": "FC-2026-005",
+      "type": "HARVEST",
+      "ts": "2026-11-05T00:00:00Z",
+      "actorId": "F001",
+      "toActorId": null,
+      "lat": 10.46,
+      "lon": 105.633,
+      "dataHash": "8fe2bf46662aa89afed61fb36b76bb8cf8d8e7e7507d0d7eed347499769519e2",
+      "payload": {
+        "quantityKg": 450,
+        "variety": "Xoài cát Hòa Lộc",
+        "certifications": [
+          "VietGAP"
+        ]
+      },
+      "rulSnapshot": {
+        "rulDaysAtCurrent": 2.87,
+        "rulDaysAtOptimal": 14.0,
+        "ciLowDays": 2.44,
+        "ciHighDays": 3.3,
+        "freshness": "FRESH",
+        "tempC": 30.3,
+        "modelVersion": "rul-q10-v0.1",
+        "modelHash": "1b7cfca4e5fad7dcf3cddb7cc2f47c6ec7a81d8ba7e602370faa8d2f1bfc1694"
+      },
+      "eventId": "EV-005-01",
+      "prevHash": "0000000000000000000000000000000000000000000000000000000000000000",
+      "eventHash": "da34e75a3f9705d42ce4d4302c85aae0dcd8caa739c3003628e5e9c7885c3f07",
+      "blockNumber": 1000001,
+      "txHash": "0x34ea465df6de70ed7cdc9eabfd27f952ca5752b42e45c0576037d853a7bc0f83"
+    },
+    {
+      "batchId": "FC-2026-005",
+      "type": "HANDOFF",
+      "ts": "2026-11-05T06:00:00Z",
+      "actorId": "F001",
+      "toActorId": "W001",
+      "lat": 10.46,
+      "lon": 105.633,
+      "dataHash": "e39ff4f51e0af53fb8753967b4e1240a9cada06629048b9960ae48675cb6ca38",
+      "payload": {
+        "legIndex": 0,
+        "legLabel": "Thu hoạch & sơ chế",
+        "fromReading": "2026-11-05T00:00:00Z",
+        "toReading": "2026-11-05T05:00:00Z",
+        "readingCount": 6
+      },
+      "rulSnapshot": {
+        "rulDaysAtCurrent": 2.76,
+        "rulDaysAtOptimal": 13.1,
+        "ciLowDays": 2.35,
+        "ciHighDays": 3.17,
+        "freshness": "FRESH",
+        "tempC": 30.0,
+        "modelVersion": "rul-q10-v0.1",
+        "modelHash": "1b7cfca4e5fad7dcf3cddb7cc2f47c6ec7a81d8ba7e602370faa8d2f1bfc1694"
+      },
+      "eventId": "EV-005-02",
+      "prevHash": "da34e75a3f9705d42ce4d4302c85aae0dcd8caa739c3003628e5e9c7885c3f07",
+      "eventHash": "10e9847bc1095604393253f66a9d036fa8500dfc99628e688b790a1bc8e45339",
+      "blockNumber": 1000002,
+      "txHash": "0x97581b310602d6c33b96f32e35832de72ccf7a5fd63008598aa9d5834c7d2270"
+    },
+    {
+      "batchId": "FC-2026-005",
+      "type": "HANDOFF",
+      "ts": "2026-11-06T06:00:00Z",
+      "actorId": "W001",
+      "toActorId": "T001",
+      "lat": 10.0452,
+      "lon": 105.7469,
+      "dataHash": "742f926a46e736dd4b3181b268250f57cb14225fa83fa44156b5795ba0df6244",
+      "payload": {
+        "legIndex": 1,
+        "legLabel": "Kho lạnh Cần Thơ",
+        "fromReading": "2026-11-05T06:00:00Z",
+        "toReading": "2026-11-06T05:00:00Z",
+        "readingCount": 24
+      },
+      "rulSnapshot": {
+        "rulDaysAtCurrent": 12.1,
+        "rulDaysAtOptimal": 12.1,
+        "ciLowDays": 10.28,
+        "ciHighDays": 13.91,
+        "freshness": "FRESH",
+        "tempC": 13.0,
+        "modelVersion": "rul-q10-v0.1",
+        "modelHash": "1b7cfca4e5fad7dcf3cddb7cc2f47c6ec7a81d8ba7e602370faa8d2f1bfc1694"
+      },
+      "eventId": "EV-005-03",
+      "prevHash": "10e9847bc1095604393253f66a9d036fa8500dfc99628e688b790a1bc8e45339",
+      "eventHash": "93556380a7c862af6984ba442cd9f9044e3aa653c47a941350d91d7858c4dac1",
+      "blockNumber": 1000003,
+      "txHash": "0xd13015ca468cbf57ce410d7016fc2be9d6f9bbe77322bd462fb0c0bbc91c68ba"
+    },
+    {
+      "batchId": "FC-2026-005",
+      "type": "HANDOFF",
+      "ts": "2026-11-06T18:00:00Z",
+      "actorId": "T001",
+      "toActorId": "D001",
+      "lat": 10.674,
+      "lon": 106.57,
+      "dataHash": "791114234d32c25a9f32f11079c3ce06508cb7da2f62c6199985016a7a7ccda7",
+      "payload": {
+        "legIndex": 2,
+        "legLabel": "Vận chuyển lạnh",
+        "fromReading": "2026-11-06T06:00:00Z",
+        "toReading": "2026-11-06T17:00:00Z",
+        "readingCount": 12
+      },
+      "rulSnapshot": {
+        "rulDaysAtCurrent": 11.46,
+        "rulDaysAtOptimal": 11.57,
+        "ciLowDays": 9.74,
+        "ciHighDays": 13.18,
+        "freshness": "FRESH",
+        "tempC": 13.1,
+        "modelVersion": "rul-q10-v0.1",
+        "modelHash": "1b7cfca4e5fad7dcf3cddb7cc2f47c6ec7a81d8ba7e602370faa8d2f1bfc1694"
+      },
+      "eventId": "EV-005-04",
+      "prevHash": "93556380a7c862af6984ba442cd9f9044e3aa653c47a941350d91d7858c4dac1",
+      "eventHash": "cdcf7af51438af1d9c0c37092c5389d479ca44e388cd7d8b179e6d89983a95ae",
+      "blockNumber": 1000004,
+      "txHash": "0xabd11414e4be0cf140a97b275d648e158e0fa95e9c87d1e8f6285a5699a39160"
+    },
+    {
+      "batchId": "FC-2026-005",
+      "type": "HANDOFF",
+      "ts": "2026-11-08T18:00:00Z",
+      "actorId": "D001",
+      "toActorId": "R001",
+      "lat": 10.674,
+      "lon": 106.57,
+      "dataHash": "5799c92203ace21368532bf2a0ba0c4e2cdd88563b194777dc13987939ea4082",
+      "payload": {
+        "legIndex": 3,
+        "legLabel": "Trung tâm phân phối",
+        "fromReading": "2026-11-06T18:00:00Z",
+        "toReading": "2026-11-08T17:00:00Z",
+        "readingCount": 48
+      },
+      "rulSnapshot": {
+        "rulDaysAtCurrent": 9.48,
+        "rulDaysAtOptimal": 9.57,
+        "ciLowDays": 8.06,
+        "ciHighDays": 10.91,
+        "freshness": "FRESH",
+        "tempC": 13.1,
+        "modelVersion": "rul-q10-v0.1",
+        "modelHash": "1b7cfca4e5fad7dcf3cddb7cc2f47c6ec7a81d8ba7e602370faa8d2f1bfc1694"
+      },
+      "eventId": "EV-005-05",
+      "prevHash": "cdcf7af51438af1d9c0c37092c5389d479ca44e388cd7d8b179e6d89983a95ae",
+      "eventHash": "9b6963a47ab008febafdcd776f7c7ef53b9f7eacb7da737c6d73d20d4d1d2c6c",
+      "blockNumber": 1000005,
+      "txHash": "0xb548f7e20d6a3f233b11c45322f47f922c508e788fa66014baf36d7420386ec1"
+    },
+    {
+      "batchId": "FC-2026-003",
+      "type": "HARVEST",
+      "ts": "2026-11-10T00:00:00Z",
+      "actorId": "F003",
+      "toActorId": null,
+      "lat": 10.85,
+      "lon": 107.9,
+      "dataHash": "64fd8973f373b6da718a1a2e70aa1d73c6236b003e98fc2ce5d319eb17b79830",
+      "payload": {
+        "quantityKg": 600,
+        "variety": "Thanh long ruột đỏ",
+        "certifications": [
+          "VietGAP"
+        ]
+      },
+      "rulSnapshot": {
+        "rulDaysAtCurrent": 3.03,
+        "rulDaysAtOptimal": 14.0,
+        "ciLowDays": 2.58,
+        "ciHighDays": 3.49,
+        "freshness": "FRESH",
+        "tempC": 29.4,
+        "modelVersion": "rul-q10-v0.1",
+        "modelHash": "1b7cfca4e5fad7dcf3cddb7cc2f47c6ec7a81d8ba7e602370faa8d2f1bfc1694"
+      },
+      "eventId": "EV-003-01",
+      "prevHash": "0000000000000000000000000000000000000000000000000000000000000000",
+      "eventHash": "93e06f8237f18bd5d8a8d81be5bda13ccfec0d7fd1d42a08c17f1a28b4fd564c",
+      "blockNumber": 1000006,
+      "txHash": "0xaf34ba954803668c78e21595c2823a98333974c0a0f59654d5bc85c86368d13e"
+    },
+    {
+      "batchId": "FC-2026-003",
+      "type": "HANDOFF",
+      "ts": "2026-11-10T06:00:00Z",
+      "actorId": "F003",
+      "toActorId": "T001",
+      "lat": 10.85,
+      "lon": 107.9,
+      "dataHash": "d00d1aea87a4458d2dd737f8a35d6165fd68113986f9bf9bee3cb2e8b331a925",
+      "payload": {
+        "legIndex": 0,
+        "legLabel": "Thu hoạch & sơ chế",
+        "fromReading": "2026-11-10T00:00:00Z",
+        "toReading": "2026-11-10T05:00:00Z",
+        "readingCount": 6
+      },
+      "rulSnapshot": {
+        "rulDaysAtCurrent": 2.63,
+        "rulDaysAtOptimal": 13.02,
+        "ciLowDays": 2.23,
+        "ciHighDays": 3.02,
+        "freshness": "FRESH",
+        "tempC": 30.3,
+        "modelVersion": "rul-q10-v0.1",
+        "modelHash": "1b7cfca4e5fad7dcf3cddb7cc2f47c6ec7a81d8ba7e602370faa8d2f1bfc1694"
+      },
+      "eventId": "EV-003-02",
+      "prevHash": "93e06f8237f18bd5d8a8d81be5bda13ccfec0d7fd1d42a08c17f1a28b4fd564c",
+      "eventHash": "904c5d3cbf2c627aa3a5f1833f6482a3095fec5b1d04441af52ddd412d8595ea",
+      "blockNumber": 1000007,
+      "txHash": "0x14f36b9a2701ba03f9bc589056e0330eb8483650dd0309be9c5b2d1e4b892571"
+    },
+    {
+      "batchId": "FC-2026-003",
+      "type": "VIOLATION",
+      "ts": "2026-11-10T13:00:00Z",
+      "actorId": "T001",
+      "toActorId": null,
+      "lat": 10.7327,
+      "lon": 107.0133,
+      "dataHash": "3feebd15e67ab288c32900d6c5a719ae9415eab170d3f212fa4dae3fb0326ffb",
+      "payload": {
+        "violationType": "TEMP_EXCURSION",
+        "thresholdC": 15.0,
+        "startTs": "2026-11-10T08:00:00Z",
+        "endTs": "2026-11-10T13:00:00Z",
+        "durationHours": 6,
+        "maxTempC": 25.3,
+        "ongoing": false
+      },
+      "rulSnapshot": {
+        "rulDaysAtCurrent": 4.23,
+        "rulDaysAtOptimal": 12.17,
+        "ciLowDays": 3.6,
+        "ciHighDays": 4.86,
+        "freshness": "FRESH",
+        "tempC": 23.4,
+        "modelVersion": "rul-q10-v0.1",
+        "modelHash": "1b7cfca4e5fad7dcf3cddb7cc2f47c6ec7a81d8ba7e602370faa8d2f1bfc1694"
+      },
+      "eventId": "EV-003-03",
+      "prevHash": "904c5d3cbf2c627aa3a5f1833f6482a3095fec5b1d04441af52ddd412d8595ea",
+      "eventHash": "fc197d9e7b9728f823e8cdc35d9d117d0e02d91e117f73a01e29ece19f710feb",
+      "blockNumber": 1000008,
+      "txHash": "0xe97029bbbdfd292c8177fc8f01cb55fca6fb35fd83a16c2d0abe5f57a0fca7b4"
+    },
+    {
+      "batchId": "FC-2026-003",
+      "type": "HANDOFF",
+      "ts": "2026-11-10T18:00:00Z",
+      "actorId": "T001",
+      "toActorId": "D001",
+      "lat": 10.674,
+      "lon": 106.57,
+      "dataHash": "22d21e07f07e7cecd487658e0596fde4a8db0cf7fbb56dddb2b5bc37dd4770ea",
+      "payload": {
+        "legIndex": 1,
+        "legLabel": "Vận chuyển lạnh",
+        "fromReading": "2026-11-10T06:00:00Z",
+        "toReading": "2026-11-10T17:00:00Z",
+        "readingCount": 12
+      },
+      "rulSnapshot": {
+        "rulDaysAtCurrent": 11.81,
+        "rulDaysAtOptimal": 12.0,
+        "ciLowDays": 10.04,
+        "ciHighDays": 13.58,
+        "freshness": "FRESH",
+        "tempC": 10.2,
+        "modelVersion": "rul-q10-v0.1",
+        "modelHash": "1b7cfca4e5fad7dcf3cddb7cc2f47c6ec7a81d8ba7e602370faa8d2f1bfc1694"
+      },
+      "eventId": "EV-003-04",
+      "prevHash": "fc197d9e7b9728f823e8cdc35d9d117d0e02d91e117f73a01e29ece19f710feb",
+      "eventHash": "79d2689f2646072700c8708bcc352a367e682990cbdb608d675d214a983945ff",
+      "blockNumber": 1000009,
+      "txHash": "0x3828c679e59e6a076c8a280ae877372429cc3399f50658c33947fc29d1cdd5b8"
+    },
+    {
+      "batchId": "FC-2026-005",
+      "type": "SOLD",
+      "ts": "2026-11-11T12:00:00Z",
+      "actorId": "R001",
+      "toActorId": null,
+      "lat": 10.734,
+      "lon": 106.722,
+      "dataHash": "4faed3bc59349dd9cb13bdfb2c1eb3f9b194117c463af398cc2ef558bc881e82",
+      "payload": {
+        "quantityKg": 450
+      },
+      "rulSnapshot": {
+        "rulDaysAtCurrent": 5.55,
+        "rulDaysAtOptimal": 6.42,
+        "ciLowDays": 4.72,
+        "ciHighDays": 6.38,
+        "freshness": "GOOD",
+        "tempC": 14.6,
+        "modelVersion": "rul-q10-v0.1",
+        "modelHash": "1b7cfca4e5fad7dcf3cddb7cc2f47c6ec7a81d8ba7e602370faa8d2f1bfc1694"
+      },
+      "eventId": "EV-005-06",
+      "prevHash": "9b6963a47ab008febafdcd776f7c7ef53b9f7eacb7da737c6d73d20d4d1d2c6c",
+      "eventHash": "d02009a9ecae246cd13c3c55d02c418366abdc14b2506fdd104b57df7d626153",
+      "blockNumber": 1000010,
+      "txHash": "0xe1ebbb8e88e8603baf639f1326262365b4413d96154c778990ce46df8a4984e2"
+    },
+    {
+      "batchId": "FC-2026-001",
+      "type": "HARVEST",
+      "ts": "2026-11-12T00:00:00Z",
+      "actorId": "F001",
+      "toActorId": null,
+      "lat": 10.46,
+      "lon": 105.633,
+      "dataHash": "fe12338a52fba855a53fefc4551cb53d8ccc72d3057f31ab36cc26a31ec62a24",
+      "payload": {
+        "quantityKg": 500,
+        "variety": "Xoài cát Hòa Lộc",
+        "certifications": [
+          "VietGAP"
+        ]
+      },
+      "rulSnapshot": {
+        "rulDaysAtCurrent": 3.2,
+        "rulDaysAtOptimal": 14.0,
+        "ciLowDays": 2.72,
+        "ciHighDays": 3.68,
+        "freshness": "FRESH",
+        "tempC": 29.1,
+        "modelVersion": "rul-q10-v0.1",
+        "modelHash": "1b7cfca4e5fad7dcf3cddb7cc2f47c6ec7a81d8ba7e602370faa8d2f1bfc1694"
+      },
+      "eventId": "EV-001-01",
+      "prevHash": "0000000000000000000000000000000000000000000000000000000000000000",
+      "eventHash": "380805b4352ec30fc5c8a37cd49b090264b45b4511c4d536f33c2fce36412bb7",
+      "blockNumber": 1000011,
+      "txHash": "0x96dd269b3ac0cde9c048822a1861b30f69c46f168960e45606202d5045f157c8"
+    },
+    {
+      "batchId": "FC-2026-006",
+      "type": "HARVEST",
+      "ts": "2026-11-12T00:00:00Z",
+      "actorId": "F002",
+      "toActorId": null,
+      "lat": 10.45,
+      "lon": 106.4,
+      "dataHash": "37afc2d86499bf999861c4e18112e1efd8f2a31648716e5ce2d47ca691895ac8",
+      "payload": {
+        "quantityKg": 700,
+        "variety": "Chuối Cavendish",
+        "certifications": [
+          "GlobalGAP"
+        ]
+      },
+      "rulSnapshot": {
+        "rulDaysAtCurrent": 3.39,
+        "rulDaysAtOptimal": 10.0,
+        "ciLowDays": 2.88,
+        "ciHighDays": 3.89,
+        "freshness": "FRESH",
+        "tempC": 27.0,
+        "modelVersion": "rul-q10-v0.1",
+        "modelHash": "1b7cfca4e5fad7dcf3cddb7cc2f47c6ec7a81d8ba7e602370faa8d2f1bfc1694"
+      },
+      "eventId": "EV-006-01",
+      "prevHash": "0000000000000000000000000000000000000000000000000000000000000000",
+      "eventHash": "0be86996d36085827692c8f721fb31208a7a300bc5632f7073fc0accf2438f60",
+      "blockNumber": 1000012,
+      "txHash": "0x96bea65c6e6de61035eccca7f3cfd758a7d9d26186daf55557c78293798025e7"
+    },
+    {
+      "batchId": "FC-2026-006",
+      "type": "HANDOFF",
+      "ts": "2026-11-12T04:00:00Z",
+      "actorId": "F002",
+      "toActorId": "T001",
+      "lat": 10.45,
+      "lon": 106.4,
+      "dataHash": "04b07017e4b50a59627892664bbb3dca8e3a67c9dc676f07176a286d5954aa0d",
+      "payload": {
+        "legIndex": 0,
+        "legLabel": "Thu hoạch & sơ chế",
+        "fromReading": "2026-11-12T00:00:00Z",
+        "toReading": "2026-11-12T03:00:00Z",
+        "readingCount": 4
+      },
+      "rulSnapshot": {
+        "rulDaysAtCurrent": 2.96,
+        "rulDaysAtOptimal": 9.58,
+        "ciLowDays": 2.52,
+        "ciHighDays": 3.4,
+        "freshness": "FRESH",
+        "tempC": 28.1,
+        "modelVersion": "rul-q10-v0.1",
+        "modelHash": "1b7cfca4e5fad7dcf3cddb7cc2f47c6ec7a81d8ba7e602370faa8d2f1bfc1694"
+      },
+      "eventId": "EV-006-02",
+      "prevHash": "0be86996d36085827692c8f721fb31208a7a300bc5632f7073fc0accf2438f60",
+      "eventHash": "34213eba28704c1af80053a82fed2ac41d34449c527304a3d95148f834d5e4d8",
+      "blockNumber": 1000013,
+      "txHash": "0x521d1b94e2c8cbbfe722bafb83c2e9e5bfba26e1439a5b33ac553231d9115674"
+    },
+    {
+      "batchId": "FC-2026-001",
+      "type": "HANDOFF",
+      "ts": "2026-11-12T06:00:00Z",
+      "actorId": "F001",
+      "toActorId": "W001",
+      "lat": 10.46,
+      "lon": 105.633,
+      "dataHash": "4b9b77d05a35872c9b3c9846556c4930910731e974d3f2d95d12c22b413eae55",
+      "payload": {
+        "legIndex": 0,
+        "legLabel": "Thu hoạch & sơ chế",
+        "fromReading": "2026-11-12T00:00:00Z",
+        "toReading": "2026-11-12T05:00:00Z",
+        "readingCount": 6
+      },
+      "rulSnapshot": {
+        "rulDaysAtCurrent": 2.72,
+        "rulDaysAtOptimal": 13.02,
+        "ciLowDays": 2.31,
+        "ciHighDays": 3.12,
+        "freshness": "FRESH",
+        "tempC": 30.1,
+        "modelVersion": "rul-q10-v0.1",
+        "modelHash": "1b7cfca4e5fad7dcf3cddb7cc2f47c6ec7a81d8ba7e602370faa8d2f1bfc1694"
+      },
+      "eventId": "EV-001-02",
+      "prevHash": "380805b4352ec30fc5c8a37cd49b090264b45b4511c4d536f33c2fce36412bb7",
+      "eventHash": "0c67b36506d42c127ab64a8c5961ecacb4daf1abe0b132e632fb822a35c755e6",
+      "blockNumber": 1000014,
+      "txHash": "0xe3a64ac694efe8d4ff45930c6777118ed7e9257bd018011cf6a3b4ed6a381b58"
+    },
+    {
+      "batchId": "FC-2026-006",
+      "type": "VIOLATION",
+      "ts": "2026-11-12T13:00:00Z",
+      "actorId": "T001",
+      "toActorId": null,
+      "lat": 10.59,
+      "lon": 106.5062,
+      "dataHash": "a33d9522cb189e516e3918ed40b7f9c33f186ff2032b48af958438f65948a349",
+      "payload": {
+        "violationType": "TEMP_EXCURSION",
+        "thresholdC": 18.0,
+        "startTs": "2026-11-12T08:00:00Z",
+        "endTs": "2026-11-12T13:00:00Z",
+        "durationHours": 6,
+        "maxTempC": 26.5,
+        "ongoing": false
+      },
+      "rulSnapshot": {
+        "rulDaysAtCurrent": 3.41,
+        "rulDaysAtOptimal": 8.75,
+        "ciLowDays": 2.9,
+        "ciHighDays": 3.93,
+        "freshness": "FRESH",
+        "tempC": 25.3,
+        "modelVersion": "rul-q10-v0.1",
+        "modelHash": "1b7cfca4e5fad7dcf3cddb7cc2f47c6ec7a81d8ba7e602370faa8d2f1bfc1694"
+      },
+      "eventId": "EV-006-03",
+      "prevHash": "34213eba28704c1af80053a82fed2ac41d34449c527304a3d95148f834d5e4d8",
+      "eventHash": "a1ba8315ebbbe976a32d63aea36072b6a6511b4e8cc068baf76debdfa0a32d0f",
+      "blockNumber": 1000015,
+      "txHash": "0xad5a7302065044dec37245182b1a750d63893c5004059d35bbcdad4469062555"
+    },
+    {
+      "batchId": "FC-2026-006",
+      "type": "HANDOFF",
+      "ts": "2026-11-12T20:00:00Z",
+      "actorId": "T001",
+      "toActorId": "D001",
+      "lat": 10.674,
+      "lon": 106.57,
+      "dataHash": "7d980f23a9eb67331e4017394ece004ca7f9f4a084f91cb84129b78c44f1b026",
+      "payload": {
+        "legIndex": 1,
+        "legLabel": "Vận chuyển lạnh",
+        "fromReading": "2026-11-12T04:00:00Z",
+        "toReading": "2026-11-12T19:00:00Z",
+        "readingCount": 16
+      },
+      "rulSnapshot": {
+        "rulDaysAtCurrent": 8.21,
+        "rulDaysAtOptimal": 8.49,
+        "ciLowDays": 6.98,
+        "ciHighDays": 9.45,
+        "freshness": "FRESH",
+        "tempC": 14.4,
+        "modelVersion": "rul-q10-v0.1",
+        "modelHash": "1b7cfca4e5fad7dcf3cddb7cc2f47c6ec7a81d8ba7e602370faa8d2f1bfc1694"
+      },
+      "eventId": "EV-006-04",
+      "prevHash": "a1ba8315ebbbe976a32d63aea36072b6a6511b4e8cc068baf76debdfa0a32d0f",
+      "eventHash": "3a367bf8829bb261ff2a51b77c471fea09ba7ac456feb904c140d023e5164c24",
+      "blockNumber": 1000016,
+      "txHash": "0xebc66bfefdc2a408825e7e0a234cc632ed227415fcfd1b5c077eeaba3bb0d54f"
+    },
+    {
+      "batchId": "FC-2026-002",
+      "type": "HARVEST",
+      "ts": "2026-11-13T00:00:00Z",
+      "actorId": "F002",
+      "toActorId": null,
+      "lat": 10.45,
+      "lon": 106.4,
+      "dataHash": "db8c01212e92019171e749b68378970eb58dba80cd734e773f2918102a235508",
+      "payload": {
+        "quantityKg": 800,
+        "variety": "Chuối Cavendish",
+        "certifications": [
+          "GlobalGAP"
+        ]
+      },
+      "rulSnapshot": {
+        "rulDaysAtCurrent": 3.14,
+        "rulDaysAtOptimal": 10.0,
+        "ciLowDays": 2.67,
+        "ciHighDays": 3.61,
+        "freshness": "FRESH",
+        "tempC": 27.9,
+        "modelVersion": "rul-q10-v0.1",
+        "modelHash": "1b7cfca4e5fad7dcf3cddb7cc2f47c6ec7a81d8ba7e602370faa8d2f1bfc1694"
+      },
+      "eventId": "EV-002-01",
+      "prevHash": "0000000000000000000000000000000000000000000000000000000000000000",
+      "eventHash": "51991906cdab60e807ade09d162852d6b943e9bef91c5e882e31c4cac88f4a56",
+      "blockNumber": 1000017,
+      "txHash": "0xaf826c66bcb682f09ab9e58400e320d3bd7325372eda834db6c42387004d7301"
+    },
+    {
+      "batchId": "FC-2026-003",
+      "type": "HANDOFF",
+      "ts": "2026-11-13T00:00:00Z",
+      "actorId": "D001",
+      "toActorId": "R002",
+      "lat": 10.674,
+      "lon": 106.57,
+      "dataHash": "c8666fb72881d648f5059be9a5b8fbf4a9745821a2b90e40620e30ee14b48d0b",
+      "payload": {
+        "legIndex": 2,
+        "legLabel": "Trung tâm phân phối",
+        "fromReading": "2026-11-10T18:00:00Z",
+        "toReading": "2026-11-12T23:00:00Z",
+        "readingCount": 54
+      },
+      "rulSnapshot": {
+        "rulDaysAtCurrent": 9.67,
+        "rulDaysAtOptimal": 9.74,
+        "ciLowDays": 8.22,
+        "ciHighDays": 11.12,
+        "freshness": "FRESH",
+        "tempC": 10.1,
+        "modelVersion": "rul-q10-v0.1",
+        "modelHash": "1b7cfca4e5fad7dcf3cddb7cc2f47c6ec7a81d8ba7e602370faa8d2f1bfc1694"
+      },
+      "eventId": "EV-003-05",
+      "prevHash": "79d2689f2646072700c8708bcc352a367e682990cbdb608d675d214a983945ff",
+      "eventHash": "db7d1e8fb3256a50f44df6edb7299ddc04a1bcab60ea7580eef4f7fce27fdab6",
+      "blockNumber": 1000018,
+      "txHash": "0x1c69ce146d50f678eb2a7155190870281b555f01b4ecea48814c0976db8fbb56"
+    },
+    {
+      "batchId": "FC-2026-002",
+      "type": "HANDOFF",
+      "ts": "2026-11-13T04:00:00Z",
+      "actorId": "F002",
+      "toActorId": "T001",
+      "lat": 10.45,
+      "lon": 106.4,
+      "dataHash": "cd782bb35911ca3a7a047171cea57cebb2962d99a2bce1d953f122734f1bc53d",
+      "payload": {
+        "legIndex": 0,
+        "legLabel": "Thu hoạch & sơ chế",
+        "fromReading": "2026-11-13T00:00:00Z",
+        "toReading": "2026-11-13T03:00:00Z",
+        "readingCount": 4
+      },
+      "rulSnapshot": {
+        "rulDaysAtCurrent": 2.84,
+        "rulDaysAtOptimal": 9.6,
+        "ciLowDays": 2.42,
+        "ciHighDays": 3.27,
+        "freshness": "FRESH",
+        "tempC": 28.6,
+        "modelVersion": "rul-q10-v0.1",
+        "modelHash": "1b7cfca4e5fad7dcf3cddb7cc2f47c6ec7a81d8ba7e602370faa8d2f1bfc1694"
+      },
+      "eventId": "EV-002-02",
+      "prevHash": "51991906cdab60e807ade09d162852d6b943e9bef91c5e882e31c4cac88f4a56",
+      "eventHash": "12dabf75c1905ba0b261e82e4d0caea1d40c496bea7aa356dd6f2c86fc6ce946",
+      "blockNumber": 1000019,
+      "txHash": "0x6b11434ff3094ed190781c8844ae328145f4926316a31a53be73445f08961e30"
+    },
+    {
+      "batchId": "FC-2026-001",
+      "type": "HANDOFF",
+      "ts": "2026-11-13T06:00:00Z",
+      "actorId": "W001",
+      "toActorId": "T001",
+      "lat": 10.0452,
+      "lon": 105.7469,
+      "dataHash": "9dfad8ac4ea0374b49cbb0d19ca4884dfae1f0a1e6798d205c2cb8ed968bca93",
+      "payload": {
+        "legIndex": 1,
+        "legLabel": "Kho lạnh Cần Thơ",
+        "fromReading": "2026-11-12T06:00:00Z",
+        "toReading": "2026-11-13T05:00:00Z",
+        "readingCount": 24
+      },
+      "rulSnapshot": {
+        "rulDaysAtCurrent": 12.01,
+        "rulDaysAtOptimal": 12.01,
+        "ciLowDays": 10.21,
+        "ciHighDays": 13.81,
+        "freshness": "FRESH",
+        "tempC": 13.0,
+        "modelVersion": "rul-q10-v0.1",
+        "modelHash": "1b7cfca4e5fad7dcf3cddb7cc2f47c6ec7a81d8ba7e602370faa8d2f1bfc1694"
+      },
+      "eventId": "EV-001-03",
+      "prevHash": "0c67b36506d42c127ab64a8c5961ecacb4daf1abe0b132e632fb822a35c755e6",
+      "eventHash": "ab5d09d211d92e0894eb9b58efd29cdc49438d9d9f5b027abc13e161098918d6",
+      "blockNumber": 1000020,
+      "txHash": "0xeccaf2f686c17de5d98cb7d37a031a501b77f3d883dec856b22fe79d3c6c4dc4"
+    },
+    {
+      "batchId": "FC-2026-001",
+      "type": "HANDOFF",
+      "ts": "2026-11-13T18:00:00Z",
+      "actorId": "T001",
+      "toActorId": "D001",
+      "lat": 10.674,
+      "lon": 106.57,
+      "dataHash": "60ccc2a09529e531c8224bd74464c4aa5037dfbec99d6b7759d278f37a7c93c9",
+      "payload": {
+        "legIndex": 2,
+        "legLabel": "Vận chuyển lạnh",
+        "fromReading": "2026-11-13T06:00:00Z",
+        "toReading": "2026-11-13T17:00:00Z",
+        "readingCount": 12
+      },
+      "rulSnapshot": {
+        "rulDaysAtCurrent": 11.8,
+        "rulDaysAtOptimal": 11.48,
+        "ciLowDays": 10.03,
+        "ciHighDays": 13.57,
+        "freshness": "FRESH",
+        "tempC": 12.7,
+        "modelVersion": "rul-q10-v0.1",
+        "modelHash": "1b7cfca4e5fad7dcf3cddb7cc2f47c6ec7a81d8ba7e602370faa8d2f1bfc1694"
+      },
+      "eventId": "EV-001-04",
+      "prevHash": "ab5d09d211d92e0894eb9b58efd29cdc49438d9d9f5b027abc13e161098918d6",
+      "eventHash": "636d8bec32a51420aece550edbac4a63dbf5b2a747f36e30b51c55db0661cf11",
+      "blockNumber": 1000021,
+      "txHash": "0x3b3cb8433c7091bc716ab70d75516297e4758504e702b3f829d98cd42e6ec257"
+    },
+    {
+      "batchId": "FC-2026-002",
+      "type": "HANDOFF",
+      "ts": "2026-11-13T20:00:00Z",
+      "actorId": "T001",
+      "toActorId": "D001",
+      "lat": 10.674,
+      "lon": 106.57,
+      "dataHash": "1fa2212c4049ec07c01fc9065efc66ab743c2ec1d506e017fc88ec903c390486",
+      "payload": {
+        "legIndex": 1,
+        "legLabel": "Vận chuyển lạnh",
+        "fromReading": "2026-11-13T04:00:00Z",
+        "toReading": "2026-11-13T19:00:00Z",
+        "readingCount": 16
+      },
+      "rulSnapshot": {
+        "rulDaysAtCurrent": 8.26,
+        "rulDaysAtOptimal": 8.9,
+        "ciLowDays": 7.02,
+        "ciHighDays": 9.5,
+        "freshness": "FRESH",
+        "tempC": 14.9,
+        "modelVersion": "rul-q10-v0.1",
+        "modelHash": "1b7cfca4e5fad7dcf3cddb7cc2f47c6ec7a81d8ba7e602370faa8d2f1bfc1694"
+      },
+      "eventId": "EV-002-03",
+      "prevHash": "12dabf75c1905ba0b261e82e4d0caea1d40c496bea7aa356dd6f2c86fc6ce946",
+      "eventHash": "74e6b52399bbcd2e602a58a5b77cc2ac1a942ab04f2effc9a0891cf3bbe0e406",
+      "blockNumber": 1000022,
+      "txHash": "0x383515be3364d90eb48337254741f735ff13461f0f5951ff3cb8420e30c5131e"
+    },
+    {
+      "batchId": "FC-2026-001",
+      "type": "HANDOFF",
+      "ts": "2026-11-14T18:00:00Z",
+      "actorId": "D001",
+      "toActorId": "R001",
+      "lat": 10.674,
+      "lon": 106.57,
+      "dataHash": "c11613d6c9ae26ceccf8c95b24cbab37a0a5b39b1fe09ae4776ce41baf5087c2",
+      "payload": {
+        "legIndex": 3,
+        "legLabel": "Trung tâm phân phối",
+        "fromReading": "2026-11-13T18:00:00Z",
+        "toReading": "2026-11-14T17:00:00Z",
+        "readingCount": 24
+      },
+      "rulSnapshot": {
+        "rulDaysAtCurrent": 10.48,
+        "rulDaysAtOptimal": 10.48,
+        "ciLowDays": 8.91,
+        "ciHighDays": 12.05,
+        "freshness": "FRESH",
+        "tempC": 13.0,
+        "modelVersion": "rul-q10-v0.1",
+        "modelHash": "1b7cfca4e5fad7dcf3cddb7cc2f47c6ec7a81d8ba7e602370faa8d2f1bfc1694"
+      },
+      "eventId": "EV-001-05",
+      "prevHash": "636d8bec32a51420aece550edbac4a63dbf5b2a747f36e30b51c55db0661cf11",
+      "eventHash": "7a10f4abb0297b9aea80ea2e588815cd576247d6a82c0ad2413a2623335669d5",
+      "blockNumber": 1000023,
+      "txHash": "0x1dad54149eb0de178f6247302cdb5b3b4493a3387d39eb56e0e41e4b41c6ae66"
+    },
+    {
+      "batchId": "FC-2026-006",
+      "type": "HANDOFF",
+      "ts": "2026-11-14T20:00:00Z",
+      "actorId": "D001",
+      "toActorId": "R002",
+      "lat": 10.674,
+      "lon": 106.57,
+      "dataHash": "09bc040a7a69e7a60f3c91e3a42221d3c5d92c51108f5bf8aef571809925c4e6",
+      "payload": {
+        "legIndex": 2,
+        "legLabel": "Trung tâm phân phối",
+        "fromReading": "2026-11-12T20:00:00Z",
+        "toReading": "2026-11-14T19:00:00Z",
+        "readingCount": 48
+      },
+      "rulSnapshot": {
+        "rulDaysAtCurrent": 5.99,
+        "rulDaysAtOptimal": 6.46,
+        "ciLowDays": 5.09,
+        "ciHighDays": 6.89,
+        "freshness": "FRESH",
+        "tempC": 14.9,
+        "modelVersion": "rul-q10-v0.1",
+        "modelHash": "1b7cfca4e5fad7dcf3cddb7cc2f47c6ec7a81d8ba7e602370faa8d2f1bfc1694"
+      },
+      "eventId": "EV-006-05",
+      "prevHash": "3a367bf8829bb261ff2a51b77c471fea09ba7ac456feb904c140d023e5164c24",
+      "eventHash": "6ae8e9fb05129114a51afebf131217cf039e250d35ac3c7599b8549dc32d58eb",
+      "blockNumber": 1000024,
+      "txHash": "0xbc3951b5003bd45a6cc4418833d6ab65e8735e594bb0610f71667d4fce94b8dd"
+    },
+    {
+      "batchId": "FC-2026-004",
+      "type": "HARVEST",
+      "ts": "2026-11-16T00:00:00Z",
+      "actorId": "F004",
+      "toActorId": null,
+      "lat": 11.9404,
+      "lon": 108.4583,
+      "dataHash": "9fd423e1ddae3dfbe41db94d70a62b278ab2f3371a31f2d4e33eb9246e8273fb",
+      "payload": {
+        "quantityKg": 120,
+        "variety": "Dâu tây Đà Lạt",
+        "certifications": [
+          "VietGAP",
+          "Hữu cơ"
+        ]
+      },
+      "rulSnapshot": {
+        "rulDaysAtCurrent": 1.3,
+        "rulDaysAtOptimal": 7.0,
+        "ciLowDays": 1.11,
+        "ciHighDays": 1.5,
+        "freshness": "FRESH",
+        "tempC": 17.3,
+        "modelVersion": "rul-q10-v0.1",
+        "modelHash": "1b7cfca4e5fad7dcf3cddb7cc2f47c6ec7a81d8ba7e602370faa8d2f1bfc1694"
+      },
+      "eventId": "EV-004-01",
+      "prevHash": "0000000000000000000000000000000000000000000000000000000000000000",
+      "eventHash": "d76afb2c1075274da588e01bb63993afd3ccca5629ae34c26d374c960898e13c",
+      "blockNumber": 1000025,
+      "txHash": "0xafe27454a3b6ebe32015af9eca02c70e076e06a95ba0feb2a9cc18ed1cebaa29"
+    },
+    {
+      "batchId": "FC-2026-004",
+      "type": "HANDOFF",
+      "ts": "2026-11-16T03:00:00Z",
+      "actorId": "F004",
+      "toActorId": "T002",
+      "lat": 11.9404,
+      "lon": 108.4583,
+      "dataHash": "d695a044122664c5b37c7711711f2c21163360a7b24bcb72449b9a61e7105597",
+      "payload": {
+        "legIndex": 0,
+        "legLabel": "Thu hoạch & sơ chế",
+        "fromReading": "2026-11-16T00:00:00Z",
+        "toReading": "2026-11-16T02:00:00Z",
+        "readingCount": 3
+      },
+      "rulSnapshot": {
+        "rulDaysAtCurrent": 1.4,
+        "rulDaysAtOptimal": 6.49,
+        "ciLowDays": 1.19,
+        "ciHighDays": 1.6,
+        "freshness": "FRESH",
+        "tempC": 16.0,
+        "modelVersion": "rul-q10-v0.1",
+        "modelHash": "1b7cfca4e5fad7dcf3cddb7cc2f47c6ec7a81d8ba7e602370faa8d2f1bfc1694"
+      },
+      "eventId": "EV-004-02",
+      "prevHash": "d76afb2c1075274da588e01bb63993afd3ccca5629ae34c26d374c960898e13c",
+      "eventHash": "36c0082be27d0950f161190c1a721f603b85182a32103f5f6b11c1ee7ec31c81",
+      "blockNumber": 1000026,
+      "txHash": "0x7faa54f1499aecdccf18b12edddb08e5b104c6e5cc6313472180244f6522cd28"
+    },
+    {
+      "batchId": "FC-2026-002",
+      "type": "HANDOFF",
+      "ts": "2026-11-16T12:00:00Z",
+      "actorId": "D001",
+      "toActorId": "T001",
+      "lat": 10.674,
+      "lon": 106.57,
+      "dataHash": "0a912009d19f1187bb84bd27dbe81378befa873aa60f6d726d98354d35277bdd",
+      "payload": {
+        "legIndex": 2,
+        "legLabel": "Trung tâm phân phối (ủ chín nhẹ)",
+        "fromReading": "2026-11-13T20:00:00Z",
+        "toReading": "2026-11-16T11:00:00Z",
+        "readingCount": 64
+      },
+      "rulSnapshot": {
+        "rulDaysAtCurrent": 6.06,
+        "rulDaysAtOptimal": 6.21,
+        "ciLowDays": 5.15,
+        "ciHighDays": 6.96,
+        "freshness": "FRESH",
+        "tempC": 14.3,
+        "modelVersion": "rul-q10-v0.1",
+        "modelHash": "1b7cfca4e5fad7dcf3cddb7cc2f47c6ec7a81d8ba7e602370faa8d2f1bfc1694"
+      },
+      "eventId": "EV-002-04",
+      "prevHash": "74e6b52399bbcd2e602a58a5b77cc2ac1a942ab04f2effc9a0891cf3bbe0e406",
+      "eventHash": "9dd498d9bed3f9b0b6812f1b3d2f24143ce2a40c3ebcc30df6b79faad61d9350",
+      "blockNumber": 1000027,
+      "txHash": "0xd829001333744a68a47bbf43464268c2d90ee3ccb8473e68fa2c8e77de77a4a0"
+    },
+    {
+      "batchId": "FC-2026-004",
+      "type": "HANDOFF",
+      "ts": "2026-11-16T12:00:00Z",
+      "actorId": "T002",
+      "toActorId": "R002",
+      "lat": 10.7769,
+      "lon": 106.7009,
+      "dataHash": "c9edd42a5ba511c46c0b40bdffc886865347bd047b9e5499be9b977aba15724c",
+      "payload": {
+        "legIndex": 1,
+        "legLabel": "Vận chuyển lạnh",
+        "fromReading": "2026-11-16T03:00:00Z",
+        "toReading": "2026-11-16T11:00:00Z",
+        "readingCount": 9
+      },
+      "rulSnapshot": {
+        "rulDaysAtCurrent": 4.9,
+        "rulDaysAtOptimal": 6.04,
+        "ciLowDays": 4.17,
+        "ciHighDays": 5.64,
+        "freshness": "FRESH",
+        "tempC": 3.9,
+        "modelVersion": "rul-q10-v0.1",
+        "modelHash": "1b7cfca4e5fad7dcf3cddb7cc2f47c6ec7a81d8ba7e602370faa8d2f1bfc1694"
+      },
+      "eventId": "EV-004-03",
+      "prevHash": "36c0082be27d0950f161190c1a721f603b85182a32103f5f6b11c1ee7ec31c81",
+      "eventHash": "0e3cb383e7efe49220d3b7c969d569d0227e70946ab4f7378fd88cbc771554f0",
+      "blockNumber": 1000028,
+      "txHash": "0xa7be348ecd50fa6ab47b924f1840b0106a70f6a6fe5df81f50cd4bab81aad36a"
+    },
+    {
+      "batchId": "FC-2026-004",
+      "type": "VIOLATION",
+      "ts": "2026-11-17T05:00:00Z",
+      "actorId": "R002",
+      "toActorId": null,
+      "lat": 10.7769,
+      "lon": 106.7009,
+      "dataHash": "e16ec7bb747de2e10461770c01230cf485f453443516aaa87d7d4ede4bc9843f",
+      "payload": {
+        "violationType": "TEMP_EXCURSION",
+        "thresholdC": 8.0,
+        "startTs": "2026-11-16T12:00:00Z",
+        "endTs": "2026-11-17T05:00:00Z",
+        "durationHours": 18,
+        "maxTempC": 12.8,
+        "ongoing": true
+      },
+      "rulSnapshot": {
+        "rulDaysAtCurrent": 1.22,
+        "rulDaysAtOptimal": 3.79,
+        "ciLowDays": 1.04,
+        "ciHighDays": 1.4,
+        "freshness": "FRESH",
+        "tempC": 12.3,
+        "modelVersion": "rul-q10-v0.1",
+        "modelHash": "1b7cfca4e5fad7dcf3cddb7cc2f47c6ec7a81d8ba7e602370faa8d2f1bfc1694"
+      },
+      "eventId": "EV-004-04",
+      "prevHash": "0e3cb383e7efe49220d3b7c969d569d0227e70946ab4f7378fd88cbc771554f0",
+      "eventHash": "3398cad7adf40c5b9175c704a749ef846e35155cd398fb2d85f37dc600fd4d7f",
+      "blockNumber": 1000029,
+      "txHash": "0x42d12b436d6b6311f504159548d9cc718c784f241f2ff3ff182ae9b49e691050"
+    }
+  ]
+}

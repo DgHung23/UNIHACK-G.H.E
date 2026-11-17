@@ -1,0 +1,74 @@
+[
+  {
+    "username": "admin",
+    "role": "ADMIN",
+    "actorId": null,
+    "demoPassword": "demo1234"
+  },
+  {
+    "username": "farm_caolanh",
+    "role": "FARMER",
+    "actorId": "F001",
+    "demoPassword": "demo1234"
+  },
+  {
+    "username": "farm_longan",
+    "role": "FARMER",
+    "actorId": "F002",
+    "demoPassword": "demo1234"
+  },
+  {
+    "username": "farm_binhthuan",
+    "role": "FARMER",
+    "actorId": "F003",
+    "demoPassword": "demo1234"
+  },
+  {
+    "username": "farm_dalat",
+    "role": "FARMER",
+    "actorId": "F004",
+    "demoPassword": "demo1234"
+  },
+  {
+    "username": "cold_cantho",
+    "role": "WAREHOUSE",
+    "actorId": "W001",
+    "demoPassword": "demo1234"
+  },
+  {
+    "username": "truck_mekong",
+    "role": "TRANSPORT",
+    "actorId": "T001",
+    "demoPassword": "demo1234"
+  },
+  {
+    "username": "truck_dalat",
+    "role": "TRANSPORT",
+    "actorId": "T002",
+    "demoPassword": "demo1234"
+  },
+  {
+    "username": "dc_binhchanh",
+    "role": "DISTRIBUTOR",
+    "actorId": "D001",
+    "demoPassword": "demo1234"
+  },
+  {
+    "username": "store_q7",
+    "role": "RETAILER",
+    "actorId": "R001",
+    "demoPassword": "demo1234"
+  },
+  {
+    "username": "store_q1",
+    "role": "RETAILER",
+    "actorId": "R002",
+    "demoPassword": "demo1234"
+  },
+  {
+    "username": "auditor",
+    "role": "REGULATOR",
+    "actorId": "A001",
+    "demoPassword": "demo1234"
+  }
+]
