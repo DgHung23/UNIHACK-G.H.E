@@ -11,7 +11,7 @@ numpy
 pillow
 opencv-python
 # Model ảnh của bạn (adapter custom). Cài theo dự án model:
-torch
+torch>=2.6
 torchvision
 # Tuỳ chọn:
 # onnxruntime        # nếu model là .onnx

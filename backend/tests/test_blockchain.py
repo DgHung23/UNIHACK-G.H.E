@@ -14,6 +14,22 @@ from app.services.verify import verify_batch
 from conftest import auth
 
 
+def test_missing_local_chain_does_not_reset_existing_database(client, monkeypatch):
+    from app import seed
+    from app.models import Batch, Inspection, SensorReading
+
+    with SessionLocal() as db:
+        before = tuple(db.query(model).count() for model in (Batch, SensorReading, LedgerEvent, Inspection))
+    monkeypatch.setattr(seed, "get_ledger", lambda: SimpleNamespace(mode="evm", is_local=True, is_ready=lambda: False))
+    def unexpected_reset():
+        raise AssertionError("Existing database must not be reset when the local chain is lost")
+    monkeypatch.setattr(seed, "reset_and_seed", unexpected_reset)
+    with pytest.raises(RuntimeError, match="không tự seed lại"):
+        seed.ensure_seeded()
+    with SessionLocal() as db:
+        assert tuple(db.query(model).count() for model in (Batch, SensorReading, LedgerEvent, Inspection)) == before
+
+
 def test_network_identity_is_public_and_has_no_secrets(client):
     response = client.get("/api/ledger/network")
     assert response.status_code == 200

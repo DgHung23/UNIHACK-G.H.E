@@ -1,216 +1,64 @@
-# Fruit RUL Prediction
+# FruitChain ML runtime
 
-This repository predicts fruit Remaining Useful Life (RUL) from time-ordered images plus timestamp-aligned sensor data.
-
-Current active scope: strawberry only. Avocado code/data remain in the repo for future work and should not be changed while the current strawberry training pipeline is being rebuilt.
-
-## Current Strawberry Direction
-
-The strawberry pipeline now trains sequence-based RUL models with fruit-level leakage control:
-
-- Model-ready samples are built as ordered image sequences, not isolated random frames.
-- Temperature and humidity are mapped from real sensor logs by timestamp.
-- Sensor values are never fabricated. If a real sensor reading cannot be matched, the sample keeps missing-sensor flags.
-- Final validation uses Leave-One-Fruit-Out Cross-Validation (LOOCV).
-- A small lab sweep is used to choose sequence length and fusion mode before training the large A/B/C/D models.
-
-The current selected config is based on the lab sweep in `notebooks/strawberry/results/`:
+Phần này chỉ **nạp model đã train và suy luận**. Không cần dự án trên Desktop, FastAPI cũ, notebook hoặc pipeline huấn luyện để chạy.
 
 ```text
-seq_len = 8
-fusion_mode = image_only
-temporal_pooling = last_mean_max
+ml_model/
+├── fruitchain_model.json       # manifest: checkpoint, config, package, file được đưa vào modelHash
+├── pyproject.toml              # package Python fruitchain-ml
+├── requirements.txt            # dependency suy luận
+├── artifacts/strawberry/
+│   └── model_d.pt              # checkpoint gốc; không train lại/đổi trọng số
+├── configs/strawberry.json     # cấu hình tiền xử lý và giá trị dự phòng
+├── samples/
+│   ├── manifest.json           # nguồn ảnh, nhãn, SHA-256, output tham chiếu trước refactor
+│   └── strawberry/             # fresh.png, midlife.png, expired.png
+├── src/fruitchain_ml/
+│   ├── runtime.py              # RulPredictor: load → preprocess → predict_hours
+│   ├── preprocessing.py        # thuật toán phân đoạn di chuyển từ bản cũ
+│   ├── image.py                # đọc ảnh, alpha, resize, ImageNet normalization
+│   ├── networks.py             # kiến trúc A/B/C/D; giữ tên layer tương thích state_dict
+│   ├── attention.py            # CBAM
+│   ├── specs.py                # tên backbone/RNN, không import training config
+│   └── __main__.py             # CLI độc lập
+└── research/                  # bản cũ: acquisition, EDA, train, evaluation, API, dữ liệu mẫu
 ```
 
-Note: the current split metadata is treated as trusted real sensor data. The latest small-model LOOCV sweep found image-only slightly ahead of early temp/humidity fusion, so the default config prioritizes the visual sequence signal.
+`research/` là kho tham khảo, không nằm trên đường import của ứng dụng. Giữ lại mã/dữ liệu cũ để không mất tài liệu nghiên cứu. [Phân tích đầy đủ](../docs/ML_ENGINE_ARCHITECTURE.md).
 
-## Model Ideas Kept
+## Chạy độc lập
 
-The old training codebase was removed, but the original A/B/C/D architecture ideas are preserved:
-
-| Model | Visual backbone | Attention | Temporal layer |
-| --- | --- | --- | --- |
-| A | EfficientNet-B0 | CBAM | GRU |
-| B | MobileNetV2 | CBAM | LSTM |
-| C | EfficientNet-B0 | CBAM | LSTM |
-| D | MobileNetV2 | CBAM | GRU |
-
-All four variants now share one clean implementation under `src/strawberry/training/`.
-
-## Repository Structure
-
-```text
-configs/
-  strawberry_training.json          Default strawberry LOOCV training config
-
-data/
-  01_raw/
-    strawberry/                     Raw strawberry videos/images and real sensor logs
-    avocado/                        Avocado raw data, kept untouched
-  02_processed/
-    strawberry/final/               Final labels, metadata, sensor mapping report
-  03_split/
-    strawberry/                     Fruit-ID-safe split artifacts
-
-docs/
-  DATA_PROTOCOL.md                  Data schema and sensor mapping rules
-  PREPROCESSING_SPEC.md             Preprocessing expectations
-  PREPROCESSING_GUIDE.md            Preprocessing operator notes
-  LABELING_PROTOCOL.md              EOL/RUL labeling rules
-  PROJECT_PLAN.md                   Team plan
-  PROGRESS_TRACKER.md               Milestone tracker
-
-models/
-  strawberry/runs/                  New LOOCV checkpoints
-  strawberry/production/            Optional production checkpoint location
-  avocado/                          Avocado model area, kept untouched
-
-notebooks/strawberry/
-  00_lab_overview.ipynb
-  01_data_audit.ipynb
-  02_ml_baseline_fusion_search.ipynb
-  03_deep_fusion_ablation_plan.ipynb
-  lab_utils.py                      Notebook helper shim over the new training package
-  results/lab_seq_fusion_search.*   Small-model sequence/fusion search results
-
-scripts/
-  run_strawberry_lab.py             Run the small model lab sweep
-  run_strawberry_training.py        Train A/B/C/D with LOOCV
-
-src/
-  app.py                            FastAPI entry point
-  avocado/                          Avocado-specific code, not modified for strawberry-only work
-  strawberry/
-    stage3_preprocessing/           Strawberry preprocessing and real sensor mapping
-    training/                       New strawberry training/evaluation package
-```
-
-## Real Sensor Mapping
-
-Preprocessing now requires a real strawberry sensor CSV. Expected columns:
-
-```text
-timestamp,temperature_c,humidity_pct
-```
-
-Accepted aliases:
-
-- `temperature` -> `temperature_c`
-- `humidity_rh` -> `humidity_pct`
-
-Run preprocessing with:
+Tại thư mục gốc repo, sau khi cài `backend/requirements.txt` hoặc `ml_model/requirements.txt`:
 
 ```powershell
-.\.venv\Scripts\python src\strawberry\stage3_preprocessing\main_preprocessing.py --sensor-csv data\01_raw\strawberry\sensor_readings.csv
+$env:PYTHONPATH = 'ml_model/src'
+py -3.10 -m fruitchain_ml --model-dir ml_model --image ml_model/samples/strawberry/fresh.png --device cpu
+Remove-Item Env:PYTHONPATH
 ```
 
-or set `sensor_csv` in `src/strawberry/stage3_preprocessing/config.json`.
+Không tạo DB, không seed, không khởi động web, không tải backbone từ Internet. Có thể cài package editable bằng `py -3.10 -m pip install -e ml_model --no-deps` rồi dùng `fruitchain-predict --model-dir ml_model --image PATH`. Khi cài package ở nơi khác, truyền rõ `--model-dir` trỏ tới bundle có artifacts/configs/manifest.
 
-The mapper writes:
+Backend tự nhận diện bundle qua `fruitchain_model.json`. Trang Model AI vẫn cho chọn thư mục/checkpoint khác. Adapter nạp package trong namespace riêng từng lần, không thêm research vào `sys.path`, không cần import tên chung `services` hoặc `training`.
 
-```text
-data/02_processed/strawberry/final/sensor_mapping_report.csv
-```
+## Hợp đồng suy luận
 
-If no real sensor CSV is available, preprocessing stops with a clear error instead of inventing environment values.
+- Checkpoint D hiện tại: MobileNetV2 + CBAM + GRU; `image_size=224`, `seq_len=8`, `fusion_mode=image_only` theo checkpoint.
+- Input upload: một ảnh; backend tách quả, nền alpha trắng khi chuẩn hóa, RGB/ImageNet. Để tương thích predictor cũ, **lặp cùng frame 8 lần**. Đây không phải 8 quan sát theo thời gian.
+- `predict_hours()` trả RUL giờ sau giải chuẩn hóa target. Backend đổi ngày và chặn giá trị âm; output thô vẫn được giữ trong metadata. NaN/Infinity bị từ chối.
+- Model image-only không sử dụng nhiệt độ/độ ẩm. Q10 và hợp nhất RUL cảm biến/ảnh vẫn thuộc backend, không trộn vào runtime ảnh.
+- Không có confidence/CI được hiệu chuẩn. Không biến điểm sanity cố định 0.9 trong bản cũ thành xác suất tin cậy. Điểm tách quả chỉ mô tả phân đoạn.
+- GrabCut được đặt seed 0 trước mỗi lần preprocess để cùng ảnh có kết quả ổn định. Công thức xử lý ảnh và kiến trúc giữ nguyên, chỉ sửa đường import tương đối.
+- Loader dùng `weights_only=True` và `load_state_dict(strict=True)`; sai kiến trúc hoặc thiếu layer sẽ báo lỗi, không nạp một phần âm thầm.
 
-## Training
+SHA-256 checkpoint gốc: `aa75eb2f1ed19d6b63e22268a94235030f2c029034dc17fea59c738791c98fa7`.
 
-Run the small lab sweep:
+`modelHash` của bundle bao gồm checkpoint, config, manifest và code suy luận. Di chuyển thư mục không đổi hash; thay code/config đổi hash. Vì phạm vi băm mở rộng, modelVersion mới khác bản legacy dù trọng số không đổi. Các sự kiện lịch sử giữ nguyên version/hash cũ.
+
+## Kiểm thử
 
 ```powershell
-.\.venv\Scripts\python scripts\run_strawberry_lab.py
+cd backend
+py -3.10 -m pytest tests/test_ml_bundle.py tests/test_rul_model_sensitivity.py tests/test_m1b_images.py
 ```
 
-Run the simple image-only paper baseline (VisualStat-Ridge):
-
-```powershell
-.\.venv\Scripts\python scripts\run_strawberry_baseline.py
-```
-
-This baseline uses only 36 hand-crafted color/texture statistics from the same image sequence, followed by `StandardScaler -> Ridge`. It writes a separate comparison report and does not alter the completed A/B/C/D artifacts. See [docs/STRAWBERRY_BASELINE_MODEL.md](docs/STRAWBERRY_BASELINE_MODEL.md) for the protocol and the time-metadata caveat.
-
-Run the additional naïve train-mean baseline (no image or metadata input):
-
-```powershell
-.\.venv\Scripts\python scripts\run_strawberry_mean_baseline.py
-```
-
-Run both baselines and create one unified comparison chart/report:
-
-```powershell
-.\.venv\Scripts\python scripts\run_strawberry_baselines.py
-```
-
-The baseline artifacts stay under `output/runs/strawberry/<run_name>/baselines/`; see
-[docs/STRAWBERRY_BASELINES.md](docs/STRAWBERRY_BASELINES.md) for the protocol and layout.
-
-Train all four strawberry models with LOOCV:
-
-```powershell
-.\.venv\Scripts\python scripts\run_strawberry_training.py
-```
-
-Equivalent module command:
-
-```powershell
-$env:PYTHONPATH="src"
-.\.venv\Scripts\python -m strawberry.training.cli train --config configs\strawberry_training.json
-```
-
-Train a subset:
-
-```powershell
-$env:PYTHONPATH="src"
-.\.venv\Scripts\python -m strawberry.training.cli train --config configs\strawberry_training.json --models C D
-```
-
-Summarize a completed run:
-
-```powershell
-$env:PYTHONPATH="src"
-.\.venv\Scripts\python -m strawberry.training.cli evaluate --run-root output\runs\strawberry\strawberry_loocv_seq3_late_env_branch
-```
-
-Outputs:
-
-```text
-models/strawberry/runs/<run_name>/<model_key>/holdout_Fxx/best_model.pt
-output/runs/strawberry/<run_name>/fold_results.csv
-output/runs/strawberry/<run_name>/model_summary.csv
-output/runs/strawberry/<run_name>/sequence_index.csv
-```
-
-## Backend
-
-The API loads the new checkpoint format from:
-
-```text
-models/strawberry/production/model_D/best_model.pt
-```
-
-Run:
-
-```powershell
-.\.venv\Scripts\python -m uvicorn app:app --app-dir src --host 127.0.0.1 --port 8000
-```
-
-`POST /api/predict` accepts the image field `file`. If the frontend has real sensor values for the current capture, include optional form fields:
-
-```text
-temperature_c
-humidity_pct
-```
-
-If these are omitted, the model receives missing-sensor flags rather than fabricated environment readings.
-
-## Minimum Definition of Done
-
-A strawberry training run is acceptable only when:
-
-- Metadata has fruit ID, timestamp, image path, EOL timestamp, and RUL hours.
-- Temperature/humidity come from real sensor mapping or are explicitly marked missing.
-- Sequences do not cross fruit IDs or long capture gaps.
-- Train/validation/test separation is by fruit ID.
-- LOOCV fold metrics and predictions are saved.
-- Avocado files remain untouched unless avocado work is explicitly requested.
+Test đối chiếu SHA-256 ảnh/ảnh preprocess, output CPU với ba mẫu trước refactor, tính độc lập khi chuyển bundle, provenance khi đổi code, checkpoint thiếu layer, tải ảnh qua API và lựa chọn tắt model qua lần khởi động. Nhãn và output tham chiếu trong sample manifest là dữ liệu hồi quy, không phải bộ đánh giá độ chính xác mô hình.

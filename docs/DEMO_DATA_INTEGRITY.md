@@ -31,6 +31,8 @@ py -3.10 -m uvicorn app.main:app --host 127.0.0.1 --port 8001
 
 `.local/dataset` phải tồn tại và không được đưa lên GitHub. Trên checkout mới, bỏ `DEMO_DATA_DIR` để dùng fixture `demo_data/`. Giữ DB và node trong suốt trình diễn; không reset/seed giữa phần trước và sau can thiệp.
 
+Sau crash/restart máy, Hardhat mặc định có thể mất trạng thái chain dù SQLite/ảnh còn nguyên. Backend sẽ giữ DB và từ chối tự seed khi không tìm thấy contract. Không coi receipt cũ là giao dịch tồn tại trên một node mới; cần khôi phục snapshot node hoặc chủ động chuẩn bị một bản trình diễn mới sau khi sao lưu.
+
 Terminal audit cần cùng `LEDGER_MODE`, `EVM_RPC`, `DATABASE_URL`, `STORAGE_DIR` như backend. Các lệnh sau chạy tại thư mục gốc repo. CLI đọc `backend/.env` và biến môi trường; không tự seed, không nạp model, không gửi giao dịch. Vì `STORAGE_DIR` tương đối được tính từ `backend`, giữ giá trị `../.local/runtime` ở cả hai terminal.
 
 ## 1. Kiểm tra trước can thiệp

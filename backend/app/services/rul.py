@@ -102,7 +102,8 @@ class ImageModelManager:
                 s["path"] = str(config.DEFAULT_MODEL_DIR)
                 if s.get("checkpoint") and not Path(s["checkpoint"]).exists():
                     s["checkpoint"] = ""
-                s["mode"] = "custom"
+                if s.get("mode") != "q10" or not config.MODEL_SETTINGS_FILE.exists():
+                    s["mode"] = "custom"
         return s
 
     def _write_settings(self) -> None:
@@ -117,6 +118,10 @@ class ImageModelManager:
 
     def update_options(self, **kw: Any) -> dict:
         with self._lock:
+            if self.model is not None and self.model.kind == "bundle" and kw.get("fruits") is not None:
+                supported = self.model.meta.get("supportedFruits") or []
+                if not set(kw["fruits"]).issubset(supported):
+                    raise ValueError(f"Bundle chỉ hỗ trợ: {', '.join(supported)}")
             for k in ("fusion", "fruits", "useSensorInputs"):
                 if k in kw and kw[k] is not None:
                     self.settings[k] = kw[k]
@@ -171,8 +176,9 @@ class ImageModelManager:
                     self._write_settings()
                 if previous is not None:
                     # Both adapters can share import paths. Transfer their ownership before unloading.
-                    new._sys_paths = list(dict.fromkeys(previous._sys_paths + new._sys_paths))
-                    previous._sys_paths = []
+                    if new.kind == "project":
+                        new._sys_paths = list(dict.fromkeys(previous._sys_paths + new._sys_paths))
+                        previous._sys_paths = []
                     previous.unload()
                 log.info("Đã nạp model ảnh %s (%s)", new.version, new.checkpoint)
             except Exception as e:  # noqa: BLE001
@@ -220,17 +226,24 @@ class ImageModelManager:
 
     def autoload(self, db: Session) -> None:
         """Khi khởi động: ưu tiên biến môi trường RUL_MODEL=custom, sau đó tới cài đặt đã lưu."""
-        if config.RUL_MODEL == "custom" and config.RUL_MODEL_PATH:
-            args = dict(path=config.RUL_MODEL_PATH, checkpoint=config.RUL_MODEL_CHECKPOINT or None, persist=False,
+        if config.RUL_MODEL == "custom":
+            args = dict(path=config.RUL_MODEL_PATH or str(config.DEFAULT_MODEL_DIR), checkpoint=config.RUL_MODEL_CHECKPOINT or None, persist=False,
                         fruits=self.settings.get("fruits"), fusion=None)
         elif config.RUL_MODEL == "q10":
+            return
+        elif self.settings.get("mode") == "q10" and config.MODEL_SETTINGS_FILE.exists():
             return
         elif self.settings.get("mode") == "custom" and self.settings.get("path"):
             target_path = self.settings["path"]
             if not Path(target_path).exists() and config.DEFAULT_MODEL_DIR.is_dir():
                 target_path = str(config.DEFAULT_MODEL_DIR)
             s = self.settings
-            args = dict(path=target_path, checkpoint=s.get("checkpoint") or None, device=s.get("device", "auto"),
+            checkpoint = s.get("checkpoint") or None
+            if target_path != s["path"]:
+                checkpoint = None
+            elif checkpoint and not Path(checkpoint).is_file() and (Path(target_path) / "fruitchain_model.json").is_file():
+                checkpoint = None
+            args = dict(path=target_path, checkpoint=checkpoint, device=s.get("device", "auto"),
                         output_unit=s.get("outputUnit", "auto"), fruits=s.get("fruits"),
                         use_sensor_inputs=s.get("useSensorInputs", True), persist=False)
         elif config.DEFAULT_MODEL_DIR.is_dir():

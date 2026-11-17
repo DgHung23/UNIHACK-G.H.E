@@ -1,0 +1,16 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "fruitchain-ml"
+version = "1.0.0"
+description = "Inference runtime for FruitChain trained image RUL models"
+requires-python = ">=3.10"
+dependencies = ["torch>=2.6", "torchvision", "numpy", "pillow", "opencv-python"]
+
+[project.scripts]
+fruitchain-predict = "fruitchain_ml.__main__:main"
+
+[tool.setuptools.packages.find]
+where = ["src"]

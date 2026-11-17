@@ -17,3 +17,7 @@ Frontend build thành công. Chromium desktop 1440px và mobile 390px: đăng nh
 Contract **Hardhat local** được nạp 42 lô, 3.187 số đo và 211 sự kiện. Sửa một số đo bằng SQL làm audit FAIL; khôi phục làm PASS; bằng chứng/giao dịch trên chain giữ nguyên.
 
 Không tạo địa chỉ hay receipt Fuji mới trong lần sửa này. Thể lệ/hướng dẫn công khai: [COMPETITION_ALIGNMENT.md](COMPETITION_ALIGNMENT.md). Test local không chứng minh đã triển khai Avalanche công khai.
+
+## Runtime model độc lập
+
+Đã tách package `fruitchain_ml`, checkpoint/config/ảnh mẫu và research. Không train lại, không đổi byte checkpoint; bundle có CLI độc lập và modelHash bao gồm code suy luận. Phân tích giới hạn chuỗi một ảnh và điểm confidence cũ: [ML_ENGINE_ARCHITECTURE.md](ML_ENGINE_ARCHITECTURE.md).

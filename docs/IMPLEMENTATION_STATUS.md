@@ -1,5 +1,7 @@
 # Trạng thái tiếp tục FruitChain — 17/11/2026
 
+Đây là snapshot lần tiếp nhận đầu. Các cập nhật UI, audit bằng terminal và engine độc lập mới nhất xem [REPORT_COMPLETED_JOBS.md](REPORT_COMPLETED_JOBS.md), [DEMO_DATA_INTEGRITY.md](DEMO_DATA_INTEGRITY.md) và [ML_ENGINE_ARCHITECTURE.md](ML_ENGINE_ARCHITECTURE.md).
+
 ## Phần đã có khi tiếp nhận từ Claude
 
 Đã có backend FastAPI/SQLite, dữ liệu demo, Q10, kiểm chứng hash, phân quyền, ingest/cảnh báo, React dashboard/chi tiết lô/truy xuất QR và trang Settings chọn thư mục. Adapter đã nhận diện được dự án Strawberry-RUL-prediction. Bộ 25 kiểm thử ban đầu đạt sau khi cài dependency vào Python đang dùng.

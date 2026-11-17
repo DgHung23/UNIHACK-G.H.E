@@ -47,10 +47,8 @@ CONTRACTS_DIR = _path("CONTRACTS_DIR", PROJECT_DIR / "contracts")
 DEFAULT_MODEL_DIR = _path("DEFAULT_MODEL_DIR", PROJECT_DIR / "ml_model")
 
 # Model ảnh: q10 (không có model ảnh) | custom (model của bạn). Có thể đổi lúc chạy ở trang Cài đặt.
-RUL_MODEL = os.environ.get("RUL_MODEL", "custom" if DEFAULT_MODEL_DIR.is_dir() else "").lower()
+RUL_MODEL = os.environ.get("RUL_MODEL", "").lower()
 RUL_MODEL_PATH = os.environ.get("RUL_MODEL_PATH", "")
-if not RUL_MODEL_PATH and DEFAULT_MODEL_DIR.is_dir():
-    RUL_MODEL_PATH = str(DEFAULT_MODEL_DIR)
 RUL_MODEL_CHECKPOINT = os.environ.get("RUL_MODEL_CHECKPOINT", "")
 FUSION = os.environ.get("FUSION", "min").lower()
 AUTO_SEED = os.environ.get("AUTO_SEED", "1") != "0"

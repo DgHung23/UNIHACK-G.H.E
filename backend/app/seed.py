@@ -132,11 +132,10 @@ def ensure_seeded() -> None:
     with SessionLocal() as db:
         empty = is_empty(db)
     if not empty and ledger.mode == "evm" and not ledger.is_ready():  # type: ignore[attr-defined]
-        if not ledger.is_local:  # type: ignore[attr-defined]
-            raise RuntimeError("Không tìm thấy contract trên mạng công khai; giữ nguyên DB. Kiểm tra EVM_CHAIN_ID/EVM_CONTRACT_ADDRESS.")
-        log.warning("Chain mới (node khởi động lại) — seed lại toàn bộ để đồng bộ DB với chain")
-        log.info("Đã seed lại: %s", reset_and_seed())
-        return
+        raise RuntimeError(
+            "Không tìm thấy contract tương ứng với DB; giữ nguyên dữ liệu, không tự seed lại. "
+            "Kiểm tra mạng/deployment hoặc khôi phục trạng thái node trước khi chạy tiếp."
+        )
     if not empty and ledger.mode == "evm" and not ledger.is_local:  # type: ignore[attr-defined]
         with SessionLocal() as db:
             for batch in db.query(Batch).all():

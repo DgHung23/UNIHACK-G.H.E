@@ -21,6 +21,7 @@ import os
 import sys
 import threading
 import time
+import uuid
 from pathlib import Path
 from typing import Any, Callable, Optional
 
@@ -28,9 +29,26 @@ from .base import RulInput, RulOutput
 
 MODEL_EXTS = {".pt", ".pth", ".onnx", ".ts", ".torchscript", ".jit"}
 SKIP_DIRS = {".git", ".venv", "venv", "env", "node_modules", "__pycache__", "site-packages", ".idea", ".vscode",
-             "data", "dataset", "datasets", "logs", "output", "outputs", "notebooks", "docs"}
+             "data", "dataset", "datasets", "logs", "output", "outputs", "notebooks", "docs", "research", "samples"}
 PROJECT_MODULES = ("services", "utils_app", "schemas", "api", "config_app", "shared", "training")
 MAX_SCAN_FILES = 400
+
+
+def find_bundle_root(folder: Path) -> Optional[Path]:
+    for candidate in (folder.resolve(), *list(folder.resolve().parents)[:6]):
+        manifest = candidate / "fruitchain_model.json"
+        if manifest.is_file():
+            document = json.loads(manifest.read_text(encoding="utf-8-sig"))
+            if document.get("format") == "fruitchain-bundle":
+                return candidate
+    return None
+
+
+def bundle_file(root: Path, relative: str) -> Path:
+    path = (root / relative).resolve()
+    if not path.is_relative_to(root.resolve()) or not path.is_file():
+        raise FileNotFoundError(f"File bundle không hợp lệ hoặc không tồn tại: {relative}")
+    return path
 
 
 # ---------------------------------------------------------------- nhận dạng thư mục
@@ -94,6 +112,25 @@ def inspect_folder(folder: str | Path | None = None) -> dict:
     if folder.is_file():
         folder = folder.parent
     folder = folder.resolve()
+    bundle_root = find_bundle_root(folder)
+    if bundle_root:
+        manifest = json.loads((bundle_root / "fruitchain_model.json").read_text(encoding="utf-8-sig"))
+        if manifest.get("schemaVersion") != 1:
+            raise ValueError("Phiên bản manifest model chưa được hỗ trợ")
+        preferred = bundle_file(bundle_root, manifest["checkpoint"])
+        config_path = bundle_file(bundle_root, manifest["config"])
+        package = manifest["package"]
+        if not package.isidentifier():
+            raise ValueError("Tên package model không hợp lệ")
+        return dict(path=str(bundle_root), kind="bundle", projectRoot=str(bundle_root), package=package,
+                    configPath=str(config_path), manifestPath=str(bundle_root / "fruitchain_model.json"), fruits=manifest["fruits"],
+                    preprocessFn=f"{package}.runtime.RulPredictor.preprocess",
+                    predictorClass=f"{package}.runtime.RulPredictor", notes=["Runtime suy luận độc lập, không import pipeline huấn luyện."],
+                    checkpoints=[dict(path=str(p.resolve()), rel=p.relative_to(bundle_root).as_posix(),
+                                      sizeMb=round(p.stat().st_size / 1e6, 2),
+                                      modified=time.strftime("%Y-%m-%d %H:%M", time.localtime(p.stat().st_mtime)))
+                                 for p in sorted(scan_model_files(bundle_root), key=lambda p: _rank_checkpoint(p, preferred))],
+                    defaultCheckpoint=str(preferred))
     proj = find_project_root(folder)
     scan_root = folder
     files = scan_model_files(scan_root)
@@ -220,13 +257,15 @@ class CustomModel:
             base = Path(self.info["projectRoot"] or self.folder)
             ckp = base / ckp
         if not ckp.is_file():
-            default_ck = self.info.get("defaultCheckpoint")
-            if default_ck and Path(default_ck).is_file():
-                ckp = Path(default_ck)
-            else:
-                raise FileNotFoundError(f"Không thấy checkpoint: {ckp}")
+            raise FileNotFoundError(f"Không thấy checkpoint: {ckp}")
         self.checkpoint = ckp.resolve()
         self.kind = self.info["kind"] if self.info["kind"] != "unknown" else "generic"
+        if self.kind == "bundle":
+            manifest = json.loads(Path(self.info["manifestPath"]).read_text(encoding="utf-8-sig"))
+            supported = manifest.get("fruits") or []
+            if fruits is not None and not set(fruits).issubset(supported):
+                raise ValueError(f"Bundle chỉ hỗ trợ: {', '.join(supported)}")
+            fruits = fruits if fruits is not None else supported
         self.device_name = device
         self.output_unit = output_unit
         self.use_sensor_inputs = use_sensor_inputs
@@ -234,6 +273,8 @@ class CustomModel:
         self.fruits = fruits
         self._lock = threading.Lock()
         self._sys_paths: list[str] = []
+        self._bundle_namespace: Optional[str] = None
+        self._bundle_runtime = None
         self._preprocess_fn: Optional[Callable] = None
         self._predict_fn: Optional[Callable] = None
         self.meta: dict[str, Any] = {}
@@ -246,7 +287,21 @@ class CustomModel:
     # ---------------- public
     def model_hash(self) -> str:
         if self._hash is None:
-            self._hash = file_sha256(self.checkpoint, self.config_path)
+            if self.kind == "bundle":
+                root = Path(self.info["projectRoot"])
+                manifest = json.loads((root / "fruitchain_model.json").read_text(encoding="utf-8-sig"))
+                paths = ["fruitchain_model.json", manifest["config"], *manifest["provenanceFiles"]]
+                digest = hashlib.sha256()
+                digest.update(b"checkpoint\0")
+                with self.checkpoint.open("rb") as handle:
+                    for chunk in iter(lambda: handle.read(1 << 20), b""):
+                        digest.update(chunk)
+                for relative in sorted(set(paths)):
+                    digest.update(relative.encode("utf-8") + b"\0")
+                    digest.update(bundle_file(root, relative).read_bytes())
+                self._hash = digest.hexdigest()
+            else:
+                self._hash = file_sha256(self.checkpoint, self.config_path)
         return self._hash
 
     def describe(self) -> dict:
@@ -267,12 +322,14 @@ class CustomModel:
                 self.device_name = "cuda" if torch.cuda.is_available() else "cpu"
             except Exception:  # noqa: BLE001
                 self.device_name = "cpu"
-        if self.kind == "project":
+        if self.kind == "bundle":
+            self._load_bundle()
+        elif self.kind == "project":
             self._load_project()
         else:
             self._load_generic()
         if self.output_unit == "auto":
-            self.output_unit = self.meta.get("outputUnit", "hours" if self.kind == "project" else "days")
+            self.output_unit = self.meta.get("outputUnit", "hours" if self.kind in ("project", "bundle") else "days")
         h = self.model_hash()
         key = self.meta.get("model_key") or self.checkpoint.stem
         self.version = f"custom-{key}-{h[:8]}"
@@ -283,6 +340,12 @@ class CustomModel:
     def unload(self) -> None:
         self._predict_fn = None
         self._preprocess_fn = None
+        self._bundle_runtime = None
+        if self._bundle_namespace:
+            for name in list(sys.modules):
+                if name == self._bundle_namespace or name.startswith(self._bundle_namespace + "."):
+                    del sys.modules[name]
+            self._bundle_namespace = None
         for p in self._sys_paths:
             while p in sys.path:
                 sys.path.remove(p)
@@ -320,6 +383,37 @@ class CustomModel:
         return RulOutput(rul_days=round(days, 2), ci_low_days=extra.pop("ciLowDays", None),
                          ci_high_days=extra.pop("ciHighDays", None), freshness=extra.pop("freshness", None),
                          extra=extra)
+
+    def _load_bundle(self) -> None:
+        root = Path(self.info["projectRoot"])
+        package = self.info["package"]
+        package_dir = root / "src" / package
+        initializer = bundle_file(root, f"src/{package}/__init__.py")
+        # An instance-specific package namespace prevents folder switches from sharing cached modules.
+        namespace = f"_fruitchain_ml_{uuid.uuid4().hex}"
+        self._bundle_namespace = namespace
+        spec = importlib.util.spec_from_file_location(namespace, initializer,
+                                                      submodule_search_locations=[str(package_dir)])
+        module = importlib.util.module_from_spec(spec)
+        sys.modules[namespace] = module
+        spec.loader.exec_module(module)
+        runtime_module = importlib.import_module(f"{namespace}.runtime")
+        predictor = runtime_module.RulPredictor(root, self.checkpoint, self.device_name)
+        self._bundle_runtime = predictor
+        self.device_name = str(predictor.device)
+        self.meta.update(predictor.metadata)
+        self.meta["supportedFruits"] = json.loads(Path(self.info["manifestPath"]).read_text(encoding="utf-8-sig"))["fruits"]
+        self.meta["checkpointSha256"] = file_sha256(self.checkpoint)
+
+        def prepare(image_bgr):
+            result = predictor.preprocess(image_bgr)
+            return result.roi, dict(method=self.info["preprocessFn"], confidence=round(float(result.confidence), 4),
+                                    bbox=[int(value) for value in result.bbox])
+
+        def predict(img, temp, humidity):
+            return predictor.predict_hours(img, temp, humidity), {"confidenceNote": predictor.metadata["confidenceNote"]}
+
+        self._preprocess_fn, self._predict_fn = prepare, predict
 
     # ---------------- dự án có sẵn (vd. Strawberry-RUL-prediction)
     def _purge_project_modules(self) -> None:

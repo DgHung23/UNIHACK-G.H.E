@@ -21,7 +21,7 @@ from ..models import Fruit
 from ..schemas import DialogIn, ModelLoadIn, ModelOptionsIn, PathIn
 from ..services import preprocess as preprocess_svc
 from ..services.rul import FUSION_MODES, image_models
-from ..services.rul_adapters.custom import MODEL_EXTS, checkpoint_info, find_project_root, inspect_folder
+from ..services.rul_adapters.custom import MODEL_EXTS, checkpoint_info, find_bundle_root, find_project_root, inspect_folder
 
 router = APIRouter(prefix="/settings", tags=["settings"], dependencies=[Depends(require_roles())])
 
@@ -93,10 +93,11 @@ def browse(path: Optional[str] = None, showHidden: bool = False) -> dict:
                             "sizeMb": round(size / 1e6, 2)})
     entries.sort(key=lambda e: (not e["isDir"], e["name"].lower()))
     proj = find_project_root(p)
+    bundled = find_bundle_root(p)
     parent = str(p.parent) if p.parent != p else None
     return {"path": str(p), "parent": parent, "entries": entries[:1000], "truncated": len(entries) > 1000,
             "drives": _drives(), "shortcuts": _shortcuts(),
-            "projectRoot": str(proj[0]) if proj else None,
+            "projectRoot": str(bundled or proj[0]) if bundled or proj else None,
             "modelFilesHere": sum(1 for e in entries if e.get("isModel"))}
 
 
@@ -179,7 +180,10 @@ def model_options(body: ModelOptionsIn, db: Session = Depends(get_db)) -> dict:
     _validate_fruits(db, body.fruits)
     if body.fusion and body.fusion not in FUSION_MODES:
         raise HTTPException(422, f"fusion phải là một trong {FUSION_MODES}")
-    return image_models.update_options(**body.model_dump())
+    try:
+        return image_models.update_options(**body.model_dump())
+    except ValueError as error:
+        raise HTTPException(422, str(error)) from None
 
 
 @router.post("/model/test")

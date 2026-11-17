@@ -4,6 +4,7 @@ import tempfile
 from pathlib import Path
 
 import pytest
+sys.dont_write_bytecode = True
 
 _TMP = Path(tempfile.mkdtemp(prefix="fruitchain_test_"))
 os.environ["DATABASE_URL"] = f"sqlite:///{(_TMP / 'test.db').as_posix()}"
@@ -36,9 +37,6 @@ def _resolve_user_model_dir() -> Path:
     bundled = getattr(config, "DEFAULT_MODEL_DIR", (config.PROJECT_DIR / "ml_model").resolve())
     if bundled.is_dir() and (bundled / "src").is_dir():
         return bundled
-    desktop_dir = Path(r"C:\Users\admin\Desktop\Strawberry-RUL-prediction")
-    if desktop_dir.is_dir() and (desktop_dir / "src").is_dir():
-        return desktop_dir
     return bundled
 
 

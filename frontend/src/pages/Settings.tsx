@@ -50,6 +50,12 @@ export default function Settings() {
       const saved = status.data?.settings;
       const selected = saved?.path === inspectedPath && d.checkpoints?.some((c: any) => c.path === saved.checkpoint) ? saved.checkpoint : d.defaultCheckpoint || "";
       setInfo(d); setCkpt(selected); setCkInfo(selected === d.defaultCheckpoint ? d.defaultCheckpointInfo || null : null);
+      if (d.kind === "bundle" && d.fruits?.length) {
+        setFruits((current) => {
+          const supported = current.filter((fruit) => d.fruits.includes(fruit));
+          return supported.length ? supported : d.fruits;
+        });
+      }
     },
   });
   const ckMeta = useMutation({ mutationFn: (p: string) => api("/settings/model/checkpoint-info", { body: { path: p } }), onSuccess: setCkInfo });
@@ -77,6 +83,7 @@ export default function Settings() {
   const pick = (p: string) => { setBrowse(false); selectFolder(p); };
   const st = status.data;
   const m = st?.model;
+  const supportedFruits = info?.kind === "bundle" ? info.fruits : !info && path === m?.folder && m?.kind === "bundle" ? m.meta?.supportedFruits : null;
 
   return (
     <div className="min-w-0 space-y-5 [overflow-wrap:anywhere]">
@@ -90,7 +97,7 @@ export default function Settings() {
             <div><div className="label">Phiên bản</div><span className="font-mono">{m.version}</span></div>
             <div className="sm:col-span-2"><div className="label">Checkpoint</div><span className="mono">{m.checkpoint}</span></div>
             <div><div className="label">modelHash (sha256 trọng số + config)</div><Hash value={m.modelHash} n={16} /></div>
-            <div><div className="label">Kiểu / thiết bị</div>{m.kind === "project" ? "Dự án có sẵn (preprocess + predictor gốc)" : "Model rời"} · {m.device}</div>
+            <div><div className="label">Kiểu / thiết bị</div>{m.kind === "bundle" ? "Runtime FruitChain tích hợp" : m.kind === "project" ? "Dự án model bên ngoài" : "Model rời"} · {m.device}</div>
             <div><div className="label">Output</div>{m.outputUnit === "hours" ? "giờ → đổi sang ngày (÷24)" : "ngày"}{m.meta?.seqLen ? ` · seq_len ${m.meta.seqLen}` : ""}</div>
             <div><div className="label">Áp dụng cho</div>{(m.fruits || []).join(", ") || "mọi loại quả"}</div>
             {m.preprocessFn && <div className="sm:col-span-2"><div className="label">Hàm tiền xử lý</div><span className="mono">{m.preprocessFn}</span></div>}
@@ -133,8 +140,8 @@ export default function Settings() {
         {inspect.isPending && <Spinner label="Đang quét thư mục…" />}
         {info && (
           <div className="mt-4 space-y-3">
-            <div className={`rounded-lg p-3 text-sm ${info.kind === "project" ? "bg-leaf-50 text-leaf-700" : info.kind === "generic" ? "bg-cold-50 text-cold-900" : "bg-warn-50 text-warn-700"}`}>
-              <b>{info.kind === "project" ? "Nhận dạng: dự án model có sẵn" : info.kind === "generic" ? "Model rời" : "Không nhận dạng được model"}</b>
+            <div className={`rounded-lg p-3 text-sm ${["project", "bundle"].includes(info.kind) ? "bg-leaf-50 text-leaf-700" : info.kind === "generic" ? "bg-cold-50 text-cold-900" : "bg-warn-50 text-warn-700"}`}>
+              <b>{info.kind === "bundle" ? "Runtime FruitChain · manifest và checkpoint hợp lệ" : info.kind === "project" ? "Nhận dạng: dự án model có sẵn" : info.kind === "generic" ? "Model rời" : "Không nhận dạng được model"}</b>
               {info.projectRoot && <div className="mono mt-1">Gốc dự án: {info.projectRoot} (gói {info.package})</div>}
               {info.preprocessFn && <div className="text-xs">Tiền xử lý: <span className="font-mono">{info.preprocessFn}</span></div>}
               {info.predictorClass && <div className="text-xs">Suy luận: <span className="font-mono">{info.predictorClass}</span></div>}
@@ -174,7 +181,7 @@ export default function Settings() {
             <div className="flex flex-wrap gap-3">
               {(st?.fruits || []).map((f: any) => (
                 <label key={f.fruitId} className="flex items-center gap-1.5 text-sm">
-                  <input type="checkbox" checked={fruits.includes(f.fruitId)} onChange={(e) => setFruits(e.target.checked ? [...fruits, f.fruitId] : fruits.filter((x) => x !== f.fruitId))} />
+                  <input type="checkbox" disabled={!!supportedFruits && !supportedFruits.includes(f.fruitId)} checked={fruits.includes(f.fruitId)} onChange={(e) => setFruits(e.target.checked ? [...fruits, f.fruitId] : fruits.filter((x) => x !== f.fruitId))} />
                   {f.nameVi}
                 </label>
               ))}
@@ -254,7 +261,8 @@ function TestPanel({ fruits }: { fruits: string[] }) {
               <div className="space-y-2 text-sm">
                 <div className="rounded-xl bg-leaf-600 p-4 text-white"><div className="text-xs opacity-80">RUL dự đoán</div><div className="text-3xl font-bold">{r.rulDays.toFixed(2)} ngày</div><div className="text-sm opacity-90">≈ {r.rulHours.toFixed(1)} giờ</div></div>
                 <div>Độ tươi: <Freshness value={r.freshness} /> {r.extra?.freshnessDerived && <span className="text-xs text-ink-400">(suy từ RUL / hạn chuẩn)</span>}</div>
-                <div className="text-xs text-ink-600">Output thô: {r.extra?.rawOutput} {r.extra?.outputUnit} · tin cậy model {r.extra?.modelConfidence ?? "—"} · tin cậy tách quả {r.preprocess?.confidence ?? "—"}</div>
+                <div className="text-xs text-ink-600">Output thô: {r.extra?.rawOutput} {r.extra?.outputUnit} · điểm tách quả {r.preprocess?.confidence ?? "—"}</div>
+                <div className="text-xs text-ink-400">Model hồi quy chưa có khoảng dự đoán được hiệu chuẩn.</div>
                 <div className="text-xs text-ink-600">Thời gian: preprocess {r.latencyMs.preprocess} ms · suy luận {r.latencyMs.predict} ms</div>
                 <div className="text-xs text-ink-400">model <span className="font-mono">{r.modelVersion}</span></div>
               </div>

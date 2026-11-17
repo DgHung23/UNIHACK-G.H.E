@@ -23,9 +23,11 @@ Script ưu tiên Python trong `backend/.venv`, môi trường đang kích hoạt
 
 ## Gắn model ảnh của bạn (trang ⚙️ Cài đặt model)
 
-1. **📁 Duyệt…** → đi tới thư mục dự án model (vd. `C:\Users\admin\Desktop\Strawberry-RUL-prediction`) → *Chọn thư mục này*.
+Dự án chạy độc lập với runtime tích hợp trong `ml_model/`. Cấu trúc và CLI suy luận: [ml_model/README.md](ml_model/README.md). Phân tích/refactor: [docs/ML_ENGINE_ARCHITECTURE.md](docs/ML_ENGINE_ARCHITECTURE.md). Mã nghiên cứu cũ nằm trong `ml_model/research/` và không được import khi chạy ứng dụng.
+
+1. Chọn **Model tích hợp** để dùng `ml_model/`, hoặc **Duyệt…** tới một thư mục model khác → *Chọn thư mục này*.
    (Hoặc **🪟 Hộp thoại Windows** để mở hộp chọn thư mục gốc của Windows, hoặc dán đường dẫn.)
-2. Hệ thống nhận dạng dự án và liệt kê mọi checkpoint; mặc định chọn `models/strawberry/production/model_D/best_model.pt`.
+2. Hệ thống nhận dạng bundle/dự án và liệt kê checkpoint; bundle mặc định dùng `artifacts/strawberry/model_d.pt`.
 3. Chọn loại quả áp dụng, chế độ hợp nhất (`FUSION`), bấm **🚀 Nạp model**.
 4. **▶ Chạy thử** một ảnh: xem ảnh sau tiền xử lý, RUL (ngày/giờ), độ tin cậy, thời gian chạy.
 
@@ -35,6 +37,7 @@ Từ đó, mỗi ảnh tải lên ở tab **Ảnh kiểm tra** của lô (loại
 lưu ảnh gốc → `imageHash` → preprocess của dự án → model → `rulImage` / `rulSensor` / `rulFinal` → sự kiện `INSPECTION` (kèm `modelHash`).
 
 Adapter: `backend/app/services/rul_adapters/custom.py`. Hỗ trợ:
+- **Bundle FruitChain**: `fruitchain_model.json` + package runtime, artifacts, config. ModelHash băm cả code suy luận; không cần code/dataset Desktop.
 - **Dự án có sẵn** (có `src/<pkg>/services/preprocessing.py` + `predictor.py`): import **nguyên văn** `preprocess()` và `FruitRULPredictor` — không viết lại, nên không lệch với lúc huấn luyện (test T-PREPROC so hash đầu ra).
 - **Model rời**: `.onnx`, TorchScript, hoặc `nn.Module` lưu nguyên; tuỳ chọn `preprocess.py` (hàm `preprocess(image_bgr)`) và `fruitchain_model.json` (`imageSize`, `seqLen`, `outputUnit`, `labels`, `classRulDays`, `mean`, `std`).
 
@@ -46,7 +49,7 @@ Adapter: `backend/app/services/rul_adapters/custom.py`. Hỗ trợ:
 | Kiến trúc | A/B/C/D (EfficientNet-B0/MobileNetV2 + CBAM + GRU/LSTM); production = **D** (MobileNetV2+CBAM+GRU) |
 | Input | Ảnh đã preprocess (tách quả bằng màu + GrabCut, nền trong suốt) → 224×224, chuẩn hoá ImageNet; chuỗi `seq_len=8` (predictor lặp 1 ảnh 8 lần); `fusion_mode=image_only` (nhiệt độ/độ ẩm truyền vào nhưng model bỏ qua) |
 | Output | RUL **giờ** (robust z-score → giải chuẩn hoá) → FruitChain đổi sang **ngày** (÷24); không có khoảng tin cậy; độ tươi suy từ RUL / `shelfRefDays` |
-| Hàm preprocess | `src/strawberry/services/preprocessing.py::preprocess(image, config)` |
+| Hàm preprocess | `ml_model/src/fruitchain_ml/preprocessing.py::preprocess(image, config)` (di chuyển từ bản Strawberry, giữ thuật toán) |
 | Loại quả | `strawberry` (Dâu tây Đà Lạt — lô FC-2026-004) |
 
 ## Kiểm thử
@@ -59,7 +62,7 @@ cd contracts; npx hardhat node                    # cửa sổ 1
 cd backend;  $env:LEDGER_MODE="evm"; python -m pytest            # cửa sổ 2
 ```
 
-Đường dẫn dự án model cho test: biến `USER_MODEL_DIR` (mặc định `C:\Users\admin\Desktop\Strawberry-RUL-prediction`; không có thì test model được bỏ qua).
+Test mặc định dùng bundle và ảnh trong `ml_model/`, không tìm tới Desktop. `USER_MODEL_DIR` có thể chỉ định rõ một dự án ngoài để kiểm tra adapter legacy.
 
 ## Avalanche và yêu cầu cuộc thi
 
@@ -81,7 +84,7 @@ Trang **Sổ cái** và QR truy xuất công khai hiển thị mạng, địa ch
 
 ## Ghi chú
 
-- `LEDGER_MODE=mock` (mặc định) chạy offline; `evm` dùng Hardhat node + `contracts/contracts/FruitChain.sol` (cần `npx hardhat compile`). Nếu node khởi động lại, backend tự seed lại để đồng bộ.
+- `LEDGER_MODE=mock` (mặc định) chạy offline; `evm` dùng Hardhat node + `contracts/contracts/FruitChain.sol`. Nếu node mất trạng thái sau crash, backend giữ nguyên DB và báo lỗi contract; không tự seed lại để tránh mất dữ liệu. Cần khôi phục node hoặc chuẩn bị database trình diễn mới một cách chủ động.
 - T-RUL: lô FC-2026-006 có 6 reading bị sửa có chủ đích trong `sensor_readings.csv` nên test tính lại RUL của lô này từ nhiệt độ gốc trong `rul_timeseries.csv`; T-VIOL cũng dùng nhiệt độ gốc đó.
 - Contract mở rộng quyền theo ghi chú mục 7: HANDOFF cho mọi bên tham gia, VIOLATION/INSPECTION cho bên tham gia + REGULATOR.
 - Python 3.10+ (spec ghi 3.11; mã tương thích cả hai).

@@ -1,42 +1,53 @@
-"""Hồi quy: model ảnh phải phân biệt quả tươi và quả đã qua EOL (không được kẹt ở ~44 giờ ≈ 1.86 ngày).
+"""Bundled sample inference; no Desktop source or training dataset is required."""
+import hashlib
+import json
 
-Nguyên nhân lỗi cũ: predictor.py gốc resize ảnh theo image.crop_width (1116) thay vì 224 lúc train,
-khiến output luôn ≈ tâm chuẩn hoá. Adapter phải ép image_size theo checkpoint với MỌI thư mục dự án.
-"""
-from pathlib import Path
-
-import pandas as pd
+import cv2
 import pytest
-from conftest import auth
 
 from app import config
-
-CANDIDATES = [Path(r"C:\Users\admin\Desktop\Strawberry-RUL-prediction"), config.PROJECT_DIR / "ml_model"]
-DIRS = [d for d in CANDIDATES if (d / "src").is_dir() and (d / "data/02_processed/strawberry/final/metadata.csv").is_file()]
-
-
-def _frames(root: Path):
-    meta = pd.read_csv(root / "data/02_processed/strawberry/final/metadata.csv")
-    f = meta[meta.fruit_id == "F01"].sort_values("timestamp").reset_index(drop=True)  # F01 = fold giữ lại của model D
-    fresh = f.iloc[7]            # RUL thật ≈ 186 giờ
-    eol = f.iloc[len(f) // 2 + 60]   # đã qua EOL (RUL thật = 0)
-    assert fresh.rul_hours > 150 and eol.rul_hours == 0
-    return root / fresh.image_path, root / eol.image_path
+from app.services.preprocess import read_image
+from app.services.rul_adapters.base import RulInput
+from app.services.rul_adapters.custom import CustomModel
+from conftest import auth
 
 
-@pytest.mark.skipif(not DIRS, reason="Không có dự án model kèm dữ liệu ảnh có nhãn")
-@pytest.mark.parametrize("model_dir", DIRS, ids=[d.name for d in DIRS])
-def test_model_distinguishes_fresh_and_eol(client, model_dir):
-    h = auth(client, "admin")
-    r = client.post("/api/settings/model/load", headers=h, json={"path": str(model_dir), "fruits": ["strawberry"]})
-    assert r.status_code == 200, r.text
-    assert r.json()["model"]["meta"]["imageSize"] == 224
-    fresh, eol = _frames(model_dir)
-    out = {}
-    for name, p in (("fresh", fresh), ("eol", eol)):
-        t = client.post("/api/settings/model/test", headers=h, files={"file": (p.name, p.read_bytes(), "image/png")})
-        assert t.status_code == 200, t.text
-        out[name] = t.json()["rulHours"]
-    assert out["fresh"] - out["eol"] > 24, out          # cách nhau > 1 ngày
-    assert abs(out["fresh"] - 44.5) > 5 or abs(out["eol"] - 44.5) > 5, out   # không kẹt ở tâm chuẩn hoá
-    client.post("/api/settings/model/unload", headers=h)
+def test_bundled_runtime_preserves_preprocessing_and_rul(tmp_path):
+    manifest = json.loads((config.DEFAULT_MODEL_DIR / "samples/manifest.json").read_text(encoding="utf-8"))
+    model = CustomModel(config.DEFAULT_MODEL_DIR, device="cpu", fruits=["strawberry"]).load()
+    try:
+        assert model.meta["imageSize"] == 224 and model.meta["seqLen"] == 8
+        assert model.meta["checkpointSha256"] == manifest["checkpointSha256"]
+        results = {}
+        for sample in manifest["samples"]:
+            image = config.DEFAULT_MODEL_DIR / "samples" / sample["path"]
+            assert hashlib.sha256(image.read_bytes()).hexdigest() == sample["imageSha256"]
+            prepared, _ = model.preprocess(read_image(image))
+            encoded = cv2.imencode(".png", prepared)[1].tobytes()
+            assert hashlib.sha256(encoded).hexdigest() == sample["preprocessedSha256"]
+            pre_path = tmp_path / f"{sample['name']}.png"
+            pre_path.write_bytes(encoded)
+            output = model.predict(RulInput(batch_id="REGRESSION", fruit_id="strawberry", image_path=str(pre_path)))
+            assert output.extra["rawOutput"] == pytest.approx(sample["referenceRulHours"], abs=0.05)
+            assert output.ci_low_days is None and output.ci_high_days is None
+            assert "modelConfidence" not in output.extra
+            results[sample["name"]] = output.extra["rawOutput"]
+        assert results["fresh"] - results["expired"] > 24
+    finally:
+        model.unload()
+
+
+def test_model_api_distinguishes_bundled_samples(client):
+    headers = auth(client, "admin")
+    response = client.post("/api/settings/model/load", headers=headers,
+                           json={"path": str(config.DEFAULT_MODEL_DIR), "device":"cpu", "fruits":["strawberry"]})
+    assert response.status_code == 200, response.text
+    outputs = {}
+    for name in ("fresh", "expired"):
+        source = config.DEFAULT_MODEL_DIR / f"samples/strawberry/{name}.png"
+        response = client.post("/api/settings/model/test", headers=headers,
+                               files={"file":(source.name, source.read_bytes(), "image/png")})
+        assert response.status_code == 200, response.text
+        outputs[name] = response.json()["rulHours"]
+    assert outputs["fresh"] - outputs["expired"] > 24
+    client.post("/api/settings/model/unload", headers=headers)

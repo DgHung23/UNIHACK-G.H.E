@@ -25,6 +25,8 @@ def synthetic_jpg() -> bytes:
 
 def sample_image() -> bytes:
     for base in (MODEL_DIR, getattr(config, "DEFAULT_MODEL_DIR", None)):
+        if base and (base / "samples/strawberry/fresh.png").is_file():
+            return (base / "samples/strawberry/fresh.png").read_bytes()
         if base and (base / "data").is_dir():
             imgs = sorted((base / "data").rglob("*.png"))
             if imgs:
@@ -91,8 +93,8 @@ def test_model_swap_preproc_and_inference(client):
     q10_hash = client.get("/api/meta/models", headers=h).json()["sensorModel"]["modelHash"]
 
     info = client.post("/api/settings/model/inspect", headers=h, json={"path": str(MODEL_DIR)}).json()
-    assert info["kind"] == "project" and info["checkpoints"]
-    assert "production" in info["defaultCheckpoint"].replace("\\", "/")
+    assert info["kind"] in ("project", "bundle") and info["checkpoints"]
+    assert Path(info["defaultCheckpoint"]).is_file()
 
     r = client.post("/api/settings/model/load", headers=h,
                     json={"path": str(MODEL_DIR), "fruits": ["strawberry"], "fusion": "min"})
@@ -129,10 +131,14 @@ def test_model_swap_preproc_and_inference(client):
     raw.write_bytes(img_bytes)
     out = config.STORAGE_DIR / "t_preproc_out.png"
     svc.run(raw, out)
-    orig_pre = sys.modules["services.preprocessing"].preprocess
-    orig_read = sys.modules["utils_app.image_utils"].read_image
-    cfg = json.loads((MODEL_DIR / "src/strawberry/config_app/config.json").read_text(encoding="utf-8-sig"))
-    ref = orig_pre(orig_read(img_bytes), cfg).roi
+    if info["kind"] == "bundle":
+        from app.services.rul import image_models
+        ref = image_models.model._bundle_runtime.preprocess(svc.read_image(raw)).roi
+    else:
+        orig_pre = sys.modules["services.preprocessing"].preprocess
+        orig_read = sys.modules["utils_app.image_utils"].read_image
+        cfg = json.loads((MODEL_DIR / "src/strawberry/config_app/config.json").read_text(encoding="utf-8-sig"))
+        ref = orig_pre(orig_read(img_bytes), cfg).roi
     assert hashlib.sha256(cv2.imencode(".png", ref)[1].tobytes()).hexdigest() == \
         hashlib.sha256(out.read_bytes()).hexdigest()
 
