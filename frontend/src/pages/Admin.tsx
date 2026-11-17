@@ -22,13 +22,13 @@ export default function Admin() {
       <PageTitle>Quản trị</PageTitle>
       <Card title="Dữ liệu demo">
         <div className="flex flex-wrap gap-2">
-          <button className="btn-primary" onClick={() => { if (confirm("Xoá toàn bộ và nạp lại dữ liệu demo?")) seed.mutate(); }} disabled={seed.isPending}>🔄 Nạp lại demo</button>
-          <button className="btn-danger" onClick={() => { if (confirm("Xoá TOÀN BỘ dữ liệu (kể cả tài khoản)?")) reset.mutate(); }} disabled={reset.isPending}>🗑 Reset</button>
-          <button className="btn-secondary" onClick={() => tick.mutate()} disabled={tick.isPending}>⏱ Simulate tick (+1 giờ)</button>
+          <button className="btn-primary" onClick={() => { if (confirm("Xoá toàn bộ và nạp lại dữ liệu demo?")) seed.mutate(); }} disabled={seed.isPending}>Nạp lại demo</button>
+          <button className="btn-danger" onClick={() => { if (confirm("Xoá TOÀN BỘ dữ liệu (kể cả tài khoản)?")) reset.mutate(); }} disabled={reset.isPending}>Reset</button>
+          <button className="btn-secondary" onClick={() => tick.mutate()} disabled={tick.isPending}>Simulate tick (+1 giờ)</button>
         </div>
         <div className="mt-3"><ErrorBox error={seed.error || reset.error || tick.error} /></div>
-        {seed.data && <div className="mt-2 text-sm text-emerald-700">✔ {JSON.stringify((seed.data as any).counts)}</div>}
-        {tick.data && <div className="mt-2 text-xs text-slate-600">{Object.entries((tick.data as any).batches).map(([k, v]: any) => `${k}: ${fmtTs(v.ts)} RUL ${v.rulDaysAtCurrent}${v.violations.length ? " ⚠ vi phạm" : ""}`).join(" · ")}</div>}
+        {seed.data && <div className="mt-2 text-sm text-leaf-700">{JSON.stringify((seed.data as any).counts)}</div>}
+        {tick.data && <div className="mt-2 text-xs text-ink-600">{Object.entries((tick.data as any).batches).map(([k, v]: any) => `${k}: ${fmtTs(v.ts)} RUL ${v.rulDaysAtCurrent}${v.violations.length ? " ⚠ vi phạm" : ""}`).join(" · ")}</div>}
       </Card>
       <Card title="Phiên bản mô hình">
         <table className="w-full">

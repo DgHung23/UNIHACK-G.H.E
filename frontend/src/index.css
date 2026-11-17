@@ -2,17 +2,33 @@
 @tailwind components;
 @tailwind utilities;
 
-@layer components {
-  .card { @apply bg-white rounded-xl border border-slate-200 shadow-sm; }
-  .btn { @apply inline-flex items-center justify-center gap-1.5 rounded-lg px-3 py-2 text-sm font-medium transition disabled:opacity-50 disabled:cursor-not-allowed; }
-  .btn-primary { @apply btn bg-brand-600 text-white hover:bg-brand-700; }
-  .btn-secondary { @apply btn bg-white border border-slate-300 text-slate-700 hover:bg-slate-50; }
-  .btn-danger { @apply btn bg-red-600 text-white hover:bg-red-700; }
-  .input { @apply w-full rounded-lg border border-slate-300 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-brand-500; }
-  .label { @apply block text-xs font-semibold uppercase tracking-wide text-slate-500 mb-1; }
-  .mono { @apply font-mono text-xs break-all; }
-  .th { @apply px-3 py-2 text-left text-xs font-semibold uppercase tracking-wide text-slate-500 whitespace-nowrap; }
-  .td { @apply px-3 py-2 text-sm align-top; }
+@layer base {
+  html { -webkit-text-size-adjust: 100%; }
+  body { @apply bg-paper font-sans text-ink-900 antialiased; font-size: 14.5px; }
+  h1, h2, h3 { @apply font-display; text-wrap: balance; }
+  :focus-visible { @apply outline-none ring-2 ring-cold-400 ring-offset-1; }
+  .tnum { font-variant-numeric: tabular-nums; }
 }
 
-.leaflet-container { height: 100%; width: 100%; border-radius: 0.75rem; }
+@layer components {
+  .card { @apply rounded-xl border border-line bg-white shadow-card; }
+  .btn { @apply inline-flex items-center justify-center gap-1.5 rounded-lg px-3.5 py-2 text-sm font-semibold transition disabled:cursor-not-allowed disabled:opacity-50; }
+  .btn-primary { @apply btn bg-cold-600 text-white hover:bg-cold-700; }
+  .btn-secondary { @apply btn border border-line bg-white text-ink-800 hover:border-cold-300 hover:bg-cold-50; }
+  .btn-ghost { @apply btn text-ink-700 hover:bg-ink-900/5; }
+  .btn-danger { @apply btn bg-danger-500 text-white hover:bg-danger-600; }
+  .btn-proof { @apply btn bg-proof-600 text-white hover:bg-proof-700; }
+  .input { @apply w-full rounded-lg border border-line bg-white px-3 py-2 text-sm text-ink-900 placeholder:text-ink-400 focus:border-cold-400 focus:outline-none focus:ring-2 focus:ring-cold-100; }
+  .label { @apply mb-1 block text-[11px] font-semibold uppercase tracking-[0.08em] text-ink-400; }
+  .mono { @apply break-all font-mono text-xs; }
+  .th { @apply whitespace-nowrap px-4 py-2.5 text-left text-[11px] font-semibold uppercase tracking-[0.08em] text-ink-400; }
+  .td { @apply px-4 py-3 align-middle text-sm; }
+  .chip { @apply inline-flex items-center gap-1 whitespace-nowrap rounded-full px-2 py-0.5 text-xs font-semibold; }
+}
+
+.leaflet-container { height: 100%; width: 100%; border-radius: 0.75rem; font-family: inherit; }
+.leaflet-popup-content { font-family: "Be Vietnam Pro", system-ui, sans-serif; }
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation: none !important; transition: none !important; }
+}

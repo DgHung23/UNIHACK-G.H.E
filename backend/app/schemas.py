@@ -76,8 +76,3 @@ class PathIn(BaseModel):
 
 class DialogIn(BaseModel):
     initial: Optional[str] = None
-
-
-class TamperIn(BaseModel):
-    tamperType: str = "sensor"
-

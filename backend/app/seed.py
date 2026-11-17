@@ -15,7 +15,6 @@ from .models import Actor, Alert, Batch, Fruit, LedgerEvent, ModelVersion, RulPo
 from .services.ledger import get_ledger
 
 log = logging.getLogger("fruitchain.seed")
-EXPECTED = {"batches": 6, "sensor_readings": 714, "ledger_events": 29, "alerts": 5, "actors": 12, "users": 12}
 
 
 def _j(name: str):  # noqa: ANN202
@@ -84,11 +83,24 @@ def seed(db: Session) -> dict:
     return self_check(db)
 
 
+def expected_counts() -> dict:
+    """Số bản ghi mong đợi, đếm từ chính bộ dữ liệu trong DEMO_DATA_DIR (không gắn cứng vào bộ demo gốc)."""
+    d = config.DEMO_DATA_DIR
+
+    def rows(name: str) -> int:
+        with open(d / name, encoding="utf-8") as f:
+            return sum(1 for _ in csv.DictReader(f))
+
+    return {"batches": len(_j("batches.json")), "sensor_readings": rows("sensor_readings.csv"),
+            "ledger_events": len(_j("events_ledger.json")["events"]), "alerts": len(_j("alerts.json")),
+            "actors": len(_j("actors.json")), "users": len(_j("users.json"))}
+
+
 def self_check(db: Session) -> dict:
     counts = {"batches": db.query(Batch).count(), "sensor_readings": db.query(SensorReading).count(),
               "ledger_events": db.query(LedgerEvent).count(), "alerts": db.query(Alert).count(),
               "actors": db.query(Actor).count(), "users": db.query(User).count()}
-    for k, v in EXPECTED.items():
+    for k, v in expected_counts().items():
         if counts[k] != v:
             log.warning("Seed self-check: %s = %s (mong đợi %s)", k, counts[k], v)
     return counts

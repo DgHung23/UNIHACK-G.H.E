@@ -59,9 +59,32 @@ export const fmtTs = (ts?: string | null) => {
 };
 export const short = (h?: string | null, n = 10) => (h ? `${h.slice(0, n)}…${h.slice(-4)}` : "—");
 
-export const FRESH_COLORS: Record<string, string> = {
-  FRESH: "#16a34a", GOOD: "#84cc16", NEAR_EXPIRY: "#f97316", EXPIRED: "#dc2626",
+export const fmtShort = (ts?: string | null) => {
+  if (!ts) return "—";
+  return new Date(ts).toLocaleString("vi-VN", { timeZone: "Asia/Ho_Chi_Minh", hour12: false, day: "2-digit", month: "2-digit", hour: "2-digit", minute: "2-digit" });
 };
+export const ago = (ts?: string | null) => {
+  if (!ts) return "—";
+  const m = Math.round((Date.now() - new Date(ts).getTime()) / 60000);
+  if (Math.abs(m) < 60) return m <= 0 ? "vừa xong" : `${m} phút trước`;
+  const h = Math.round(m / 60);
+  if (Math.abs(h) < 48) return `${h} giờ trước`;
+  return `${Math.round(h / 24)} ngày trước`;
+};
+
+export const FRESH_COLORS: Record<string, string> = {
+  FRESH: "#2f9a52", GOOD: "#8aa834", NEAR_EXPIRY: "#d48a0c", EXPIRED: "#d6453b",
+};
+export const FRUIT_COLOR: Record<string, string> = {
+  strawberry: "#d9415a", mango: "#e79b1f", banana: "#d9b62c", dragonfruit: "#b8336f", durian: "#8f9b2d",
+  pomelo: "#5ea548", orange: "#e8741c", avocado: "#4c7a37",
+};
+/** Thứ tự các chặng trong hành trình của một lô (theo trạng thái). */
+export const STAGES = [
+  { key: "HARVESTED", label: "Thu hoạch" }, { key: "IN_STORAGE", label: "Kho lạnh" }, { key: "IN_TRANSIT", label: "Vận chuyển" },
+  { key: "AT_DISTRIBUTOR", label: "Phân phối" }, { key: "IN_STORE", label: "Cửa hàng" }, { key: "SOLD", label: "Đã bán" },
+];
+export const stageIndex = (status: string) => Math.max(0, STAGES.findIndex((s) => s.key === status));
 export const FRESH_LABEL: Record<string, string> = {
   FRESH: "Tươi", GOOD: "Tốt", NEAR_EXPIRY: "Sắp hết hạn", EXPIRED: "Hết hạn",
 };

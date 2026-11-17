@@ -63,12 +63,14 @@ cd backend;  $env:LEDGER_MODE="evm"; python -m pytest            # cửa sổ 2
 
 ## Avalanche và yêu cầu cuộc thi
 
+UI đã bỏ các nút giả lập can thiệp và tab kiểm chứng. Cách sửa SQLite/file ảnh trực tiếp và audit bằng terminal nằm trong [docs/DEMO_DATA_INTEGRITY.md](docs/DEMO_DATA_INTEGRITY.md). Công cụ đọc độc lập: `py -3.10 tools/check_integrity.py --batch-id MA_LO --json`. Dữ liệu bổ sung nằm trong `.local/` và không đưa lên GitHub; test dùng fixture chuẩn riêng.
+
 Phân tích thể lệ chính thức, thang điểm, hướng dẫn deploy Fuji và kịch bản demo chi tiết nằm ở [docs/COMPETITION_ALIGNMENT.md](docs/COMPETITION_ALIGNMENT.md). Theo [FAQ Team1 Vietnam](https://team1vn.xyz/#faq-submit), dự án có sẵn được tham gia nhưng phải có một phần chạy thật trên Avalanche (Fuji Testnet chain ID `43113` hoặc C-Chain `43114`). `LEDGER_MODE=mock` và Hardhat local chỉ phục vụ phát triển; cần deploy Fuji, ghi giao dịch thật và đưa link explorer vào bài nộp.
 
 ### Hồ sơ nộp bài dự thi (Submission Checklist)
 Theo quy định nộp bài tại [team1vn.xyz](https://team1vn.xyz/):
 1. **GitHub Repository**: Mã nguồn đầy đủ; nếu đặt chế độ Private phải mời collaborator `tuantqse90`.
-2. **Video demo (2–3 phút)**: Trình diễn luồng thực tế (Cài đặt nạp model thật, upload ảnh kiểm tra lô dâu tây, timeline Inspection, Verify lô sạch vs lô bị can thiệp 006, trang truy xuất công khai và liên kết giao dịch trên Avalanche Fuji Explorer). Kịch bản phân bổ từng giây xem tại [docs/COMPETITION_ALIGNMENT.md](docs/COMPETITION_ALIGNMENT.md).
+2. **Video demo (2–3 phút)**: Nạp model, upload ảnh, timeline, sửa một số đo SQLite rồi audit bằng terminal, truy xuất công khai và giao dịch Fuji Explorer. Kịch bản xem tại [docs/DEMO_DATA_INTEGRITY.md](docs/DEMO_DATA_INTEGRITY.md).
 3. **Slide thuyết trình**: Trình bày vấn đề hao hụt trái cây, giải pháp RUL + Smart Contract bằng chứng không thể sửa đổi, mô hình relayer và ma trận chấm điểm.
 4. **Minh chứng giao dịch Avalanche Fuji**:
    - Chain ID: `43113` | RPC: `https://api.avax-test.network/ext/bc/C/rpc`

@@ -14,6 +14,7 @@ os.environ["BCRYPT_ROUNDS"] = "4"
 os.environ["AUTO_SEED"] = "1"
 
 BACKEND = Path(__file__).resolve().parents[1]
+os.environ["DEMO_DATA_DIR"] = str(BACKEND.parent / "demo_data")
 sys.path.insert(0, str(BACKEND))
 
 from fastapi.testclient import TestClient  # noqa: E402

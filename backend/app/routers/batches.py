@@ -12,7 +12,7 @@ from .. import config
 from ..auth import current_user, require_roles
 from ..db import get_db
 from ..models import Actor, Batch, Fruit, Inspection, RulPoint, SensorReading, User
-from ..schemas import BatchCreateIn, HandoffIn, SoldIn, TamperIn
+from ..schemas import BatchCreateIn, HandoffIn, SoldIn
 from ..serializers import batch_dict, inspection_dict, reading_dict
 from ..services import preprocess as preprocess_svc
 from ..services.events import append_event, custody_timeline, utc_now_iso
@@ -214,98 +214,6 @@ def sold(batch_id: str, body: Optional[SoldIn] = None, db: Session = Depends(get
 def verify(batch_id: str, db: Session = Depends(get_db), _u: User = Depends(current_user)) -> dict:
     get_batch(db, batch_id)
     return verify_batch(db, batch_id)
-
-
-_TAMPER_BACKUPS: dict[str, dict] = {}
-
-
-@router.post("/{batch_id}/simulate-tamper")
-def simulate_tamper(batch_id: str, body: Optional[TamperIn] = None, db: Session = Depends(get_db),
-                    _u: User = Depends(current_user)) -> dict:
-    get_batch(db, batch_id)
-    ttype = (body.tamperType if body else "sensor") or "sensor"
-    if batch_id not in _TAMPER_BACKUPS:
-        _TAMPER_BACKUPS[batch_id] = {}
-
-    if ttype == "sensor":
-        reading = db.query(SensorReading).filter(SensorReading.batch_id == batch_id).order_by(SensorReading.ts.desc()).first()
-        if not reading:
-            raise HTTPException(400, "Lô không có dữ liệu cảm biến để can thiệp")
-        if "sensor" not in _TAMPER_BACKUPS[batch_id]:
-            _TAMPER_BACKUPS[batch_id]["sensor"] = {
-                "ts": reading.ts,
-                "temp_c": reading.temp_c,
-                "device_sig": reading.device_sig,
-            }
-        reading.temp_c = round(reading.temp_c + 12.5, 2)
-        db.commit()
-        return {
-            "status": "tampered",
-            "batchId": batch_id,
-            "tamperType": "sensor",
-            "readingTs": reading.ts,
-            "newTempC": reading.temp_c,
-            "message": "Đã sửa đổi nhiệt độ trong CSDL (+12.5°C). Trong CSDL thông thường, thay đổi này bị che giấu hoàn toàn. Hãy bấm 'Verify' để xem Blockchain phát hiện!",
-            "explanation": {
-                "traditionalDb": "CSDL tập trung ghi đè giá trị mới, người dùng mù quáng tin vào dữ liệu giả mạo.",
-                "blockchain": "Smart Contract trên Avalanche lưu trữ Merkle Hash bất biến. Khi đối chiếu, hash tính lại không khớp và chữ ký thiết bị bị phát hiện sai lệch ngay lập tức.",
-            },
-        }
-    elif ttype == "image":
-        insp = db.query(Inspection).filter(Inspection.batch_id == batch_id).first()
-        if not insp or not Path(insp.raw_image_path).is_file():
-            raise HTTPException(400, "Lô chưa có ảnh kiểm tra (Inspection). Vui lòng tải một ảnh lên ở tab 'Ảnh kiểm tra' của lô này trước khi thử nghiệm tráo ảnh!")
-        img_p = Path(insp.raw_image_path)
-        if "image" not in _TAMPER_BACKUPS[batch_id]:
-            _TAMPER_BACKUPS[batch_id]["image"] = {
-                "path": str(img_p),
-                "bytes": img_p.read_bytes(),
-            }
-        b = bytearray(img_p.read_bytes())
-        b[len(b) // 2] ^= 0xFF
-        b[len(b) // 2 + 1] ^= 0xAA
-        img_p.write_bytes(bytes(b))
-        return {
-            "status": "tampered",
-            "batchId": batch_id,
-            "tamperType": "image",
-            "imagePath": str(img_p),
-            "message": "Đã làm biến đổi file ảnh kiểm tra trong ổ đĩa/DB. Trong CSDL thông thường, file ảnh bị sửa/tráo sẽ không bị phát hiện. Hãy bấm 'Verify' để xem Blockchain bắt lỗi!",
-            "explanation": {
-                "traditionalDb": "CSDL tập trung chỉ lưu đường dẫn file; nếu tráo ảnh dâu hỏng thành dâu đẹp, hệ thống sẽ tin tưởng mù quáng.",
-                "blockchain": "Smart Contract đã neo chặt imageHash (SHA-256) trên Avalanche. Khi đối chiếu ảnh với sổ cái, tính toàn vẹn bị vi phạm lập tức.",
-            },
-        }
-    else:
-        raise HTTPException(400, f"Loại can thiệp không hợp lệ: {ttype}")
-
-
-@router.post("/{batch_id}/restore-tamper")
-def restore_tamper(batch_id: str, db: Session = Depends(get_db), _u: User = Depends(current_user)) -> dict:
-    get_batch(db, batch_id)
-    backup = _TAMPER_BACKUPS.pop(batch_id, None)
-    restored = []
-    if backup:
-        if "sensor" in backup:
-            s_bk = backup["sensor"]
-            reading = db.query(SensorReading).filter(SensorReading.batch_id == batch_id, SensorReading.ts == s_bk["ts"]).first()
-            if reading:
-                reading.temp_c = s_bk["temp_c"]
-                reading.device_sig = s_bk["device_sig"]
-                db.commit()
-                restored.append("sensor")
-        if "image" in backup:
-            i_bk = backup["image"]
-            p = Path(i_bk["path"])
-            if p.parent.exists():
-                p.write_bytes(i_bk["bytes"])
-                restored.append("image")
-    return {
-        "status": "restored",
-        "batchId": batch_id,
-        "restoredComponents": restored,
-        "message": "Dữ liệu đã được khôi phục về trạng thái toàn vẹn ban đầu.",
-    }
 
 
 # ---------------------------------------------------------------- ảnh kiểm tra

@@ -82,7 +82,7 @@ def public_trace(batch_id: str, db: Session = Depends(get_db)) -> dict:
     v = verify_batch(db, batch_id)
     farm = actors.get(b.farm_id)
     return {
-        "batchId": b.batch_id, "productName": d["productName"], "variety": b.variety,
+        "batchId": b.batch_id, "fruitId": b.fruit_id, "productName": d["productName"], "variety": b.variety,
         "farmName": farm.name if farm else None, "originProvince": b.origin_province, "harvestTs": b.harvest_ts,
         "certifications": b.certifications, "status": b.status, "quantityKg": b.quantity_kg,
         "currentHolder": d["currentActorName"], "latestRul": d["latestRul"], "metadataHash": b.metadata_hash,

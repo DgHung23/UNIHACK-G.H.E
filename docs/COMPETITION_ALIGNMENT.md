@@ -1,5 +1,7 @@
 # FruitChain — đối chiếu Team1 Vietnam UniHack
 
+Cập nhật luồng UI: tab/nút kiểm chứng và các nút giả lập đã được loại bỏ. Phần demo toàn vẹn thực hiện bằng sửa SQLite/file ảnh và audit trên terminal theo [DEMO_DATA_INTEGRITY.md](DEMO_DATA_INTEGRITY.md); các nhắc đến Verify bên dưới được hiểu là công cụ audit này.
+
 Kiểm tra ngày **17/11/2026, UTC+7**. Nguồn chính: [team1vn.xyz](https://team1vn.xyz/) (FAQ + Judging Criteria). Website đọc được bằng `curl.exe -L -A "Mozilla/5.0" https://team1vn.xyz/`; công cụ tìm kiếm không đọc được trang này tại thời điểm kiểm tra.
 
 ## Quy định đã xác nhận và điểm cần chú ý

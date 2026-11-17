@@ -2,7 +2,7 @@
 import { CircleMarker, MapContainer, Polyline, Popup, TileLayer } from "react-leaflet";
 import { EVENT_LABEL, fmtTs } from "../api/client";
 
-const EV_COLOR: Record<string, string> = { HARVEST: "#16a34a", HANDOFF: "#2563eb", VIOLATION: "#dc2626", SOLD: "#475569", INSPECTION: "#db2777" };
+const EV_COLOR: Record<string, string> = { HARVEST: "#2f9a52", HANDOFF: "#0f6a7c", VIOLATION: "#d6453b", SOLD: "#2b4d42", INSPECTION: "#5057d8" };
 
 export default function RouteMap({ readings, events }: { readings: any[]; events: any[] }) {
   const pts = readings.map((r) => [r.lat, r.lon] as [number, number]);
@@ -15,14 +15,14 @@ export default function RouteMap({ readings, events }: { readings: any[]; events
   return (
     <div className="h-[420px]">
       <MapContainer bounds={bounds} scrollWheelZoom={false}>
-        <TileLayer attribution='&copy; OpenStreetMap' url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" />
-        <Polyline positions={pts} pathOptions={{ color: "#059669", weight: 4, opacity: 0.8 }} />
+        <TileLayer attribution='&copy; OpenStreetMap &copy; CARTO' url="https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png" />
+        <Polyline positions={pts} pathOptions={{ color: "#1a7f93", weight: 4, opacity: 0.85 }} />
         {evs.map((e) => (
           <CircleMarker key={e.eventId} center={[e.lat, e.lon]} radius={8} pathOptions={{ color: "#fff", weight: 2, fillColor: EV_COLOR[e.type] || "#64748b", fillOpacity: 1 }}>
             <Popup><b>{EVENT_LABEL[e.type] || e.type}</b><br />{fmtTs(e.ts)}<br />{e.actorName}{e.toActorName ? ` → ${e.toActorName}` : ""}</Popup>
           </CircleMarker>
         ))}
-        {last && <CircleMarker center={last} radius={10} pathOptions={{ color: "#059669", weight: 3, fillColor: "#fff", fillOpacity: 1 }}><Popup>Vị trí hiện tại</Popup></CircleMarker>}
+        {last && <CircleMarker center={last} radius={10} pathOptions={{ color: "#0d1c17", weight: 3, fillColor: "#fff", fillOpacity: 1 }}><Popup>Vị trí hiện tại</Popup></CircleMarker>}
       </MapContainer>
     </div>
   );

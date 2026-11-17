@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { useMutation, useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { api } from "../api/client";
 import { useAuth } from "../auth";
 import { Card, ErrorBox, PageTitle } from "../components/ui";
@@ -9,13 +9,17 @@ import { Card, ErrorBox, PageTitle } from "../components/ui";
 export default function NewBatch() {
   const { user } = useAuth();
   const nav = useNavigate();
+  const queries = useQueryClient();
   const fruits = useQuery<any[]>({ queryKey: ["fruits"], queryFn: () => api("/meta/fruits") });
   const actors = useQuery<any[]>({ queryKey: ["actors"], queryFn: () => api("/meta/actors") });
   const farms = (actors.data || []).filter((a) => a.role === "FARMER" && (user?.role === "ADMIN" || a.actorId === user?.actorId));
   const [f, setF] = useState<any>({ fruitId: "", variety: "", farmId: user?.actorId || "", quantityKg: 100, certifications: "VietGAP" });
   const create = useMutation({
     mutationFn: () => api("/batches", { body: { ...f, quantityKg: Number(f.quantityKg), certifications: f.certifications.split(",").map((s: string) => s.trim()).filter(Boolean) } }),
-    onSuccess: (b: any) => nav(`/batches/${b.batchId}`),
+    onSuccess: (b: any) => {
+      ["batches", "ledger"].forEach((key) => queries.invalidateQueries({ queryKey: [key] }));
+      nav(`/batches/${b.batchId}`);
+    },
   });
   const set = (k: string) => (e: any) => setF({ ...f, [k]: e.target.value });
   return (
