@@ -29,6 +29,30 @@
 .leaflet-container { height: 100%; width: 100%; border-radius: 0.75rem; font-family: inherit; }
 .leaflet-popup-content { font-family: "Be Vietnam Pro", system-ui, sans-serif; }
 
+.map-shell { position: relative; isolation: isolate; overflow: hidden; border-radius: .75rem; background: #e7f0f2; }
+.map-shell .leaflet-container { background: #e7f0f2; }
+.map-satellite .leaflet-vietnam-labels-pane img { filter: drop-shadow(0 0 1px #fff) drop-shadow(0 0 1px #fff); }
+.map-shell:fullscreen, .map-shell.map-fullscreen { width: 100%; height: 100% !important; border-radius: 0; }
+.map-shell.map-fullscreen { position: fixed; inset: 0; z-index: 3000; }
+.map-toolbar { position: absolute; inset: 12px 12px auto; z-index: 800; display: flex; align-items: flex-start; justify-content: space-between; pointer-events: none; gap: 8px; }
+.map-layer-switch, .map-actions { pointer-events: auto; padding: 4px; background: rgba(255,255,255,.96); border: 1px solid #dfe6e2; border-radius: 12px; box-shadow: 0 3px 16px #0d1c1715; }
+.map-layer-switch { display: flex; gap: 2px; }
+.map-layer-switch button { display: flex; align-items: center; gap: 6px; min-height: 36px; padding: 0 10px; border-radius: 8px; color: #56685f; font-size: 12px; font-weight: 600; }
+.map-layer-switch button[aria-pressed="true"] { color: #fff; background: #0f6a7c; box-shadow: 0 2px 4px #0f6a7c20; }
+.map-layer-switch button:not([aria-pressed="true"]):hover, .map-actions button:hover { background: #edf4f2; }
+.map-actions { display: flex; flex-direction: column; gap: 2px; }
+.map-actions button { display: flex; align-items: center; justify-content: center; width: 36px; height: 36px; border-radius: 8px; color: #28463b; }
+.map-actions button:disabled { opacity: .35; cursor: default; }
+.map-control-divider { height: 1px; margin: 2px 5px; background: #dfe6e2; }
+.map-gesture-hint { position: absolute; bottom: 29px; left: 12px; z-index: 700; pointer-events: none; font-size: 10px; color: #28463b; background: #ffffffe0; padding: 3px 7px; border-radius: 5px; }
+.map-load-error { position: absolute; bottom: 55px; left: 12px; right: 64px; z-index: 800; display: flex; flex-wrap: wrap; align-items: center; gap: 6px; background: #fff8e6; padding: 7px 10px; border: 1px solid #ead7a3; border-radius: 8px; color: #785715; font-size: 11px; }
+.map-load-error button { display: inline-flex; align-items: center; gap: 4px; font-weight: 600; text-decoration: underline; }
+.leaflet-tooltip.map-count-label { background: transparent; border: 0; box-shadow: none; color: #fff; font-size: 11px; font-weight: 700; padding: 0; }
+.map-batch-list { max-height: 160px; overflow: auto; overscroll-behavior: contain; }
+.map-batch-list > div + div { border-top: 1px solid #dfe6e2; margin-top: 9px; padding-top: 9px; }
+.map-shell .leaflet-control-attribution { max-width: calc(100% - 12px); font-size: 9px; background: #ffffffe6; }
+@media (pointer: coarse) { .map-gesture-hint { display: none; } }
+
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after { animation: none !important; transition: none !important; }
 }

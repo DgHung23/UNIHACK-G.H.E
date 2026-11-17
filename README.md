@@ -21,6 +21,17 @@ cd ..\frontend;  npm install;  npm run dev      # http://localhost:5173 (proxy /
 
 Script ưu tiên Python trong `backend/.venv`, môi trường đang kích hoạt, hoặc Python 3.10 qua `py`; tự cài dependency còn thiếu và build lại frontend trước khi chạy. Có thể chỉ định rõ bằng `-Python 'C:\Program Files\Python310\python.exe'`. Đăng nhập `admin` / `demo1234` rồi mở `/settings` để chọn thư mục.
 
+## Bản đồ vận chuyển
+
+Bản đồ trên trang **Tổng quan** và tab **Bản đồ** của từng lô dùng chung hai chế độ, không cần API key:
+
+- **Bản đồ**: nền Việt Nam và lớp nhãn của [NARENCA](https://cosodulieu.bando.com.vn/).
+- **Vệ tinh**: ảnh Esri World Imagery kết hợp lớp nhãn NARENCA. Tên **QĐ. Hoàng Sa** và **QĐ. Trường Sa** hiển thị bằng tiếng Việt ở cả hai chế độ; nhãn có viền sáng khi xem vệ tinh.
+
+Cuộn chuột, nhấp đúp hoặc chụm hai ngón tay để thu phóng; kéo để di chuyển. Các nút bên phải cho phép **Toàn màn hình** (Escape để thoát), **Về vị trí các lô / Về tuyến đường**, **Toàn cảnh Việt Nam** và phóng to/thu nhỏ. Các lô gần nhau được gom thành điểm có số lượng; bấm để mở danh sách từng lô, phóng to để tách các điểm.
+
+Các lớp bản đồ cần Internet. Khi tải lỗi, bản đồ hiển thị nút **Thử lại**. Nền bản đồ thường tập trung vào Việt Nam; mức chi tiết phụ thuộc nhà cung cấp. Cấu hình nguồn, lớp nhãn và ghi công: [docs/MAP_LAYERS.md](docs/MAP_LAYERS.md).
+
 ## Gắn model ảnh của bạn (trang ⚙️ Cài đặt model)
 
 Dự án chạy độc lập với runtime tích hợp trong `ml_model/`. Cấu trúc và CLI suy luận: [ml_model/README.md](ml_model/README.md). Phân tích/refactor: [docs/ML_ENGINE_ARCHITECTURE.md](docs/ML_ENGINE_ARCHITECTURE.md). Mã nghiên cứu cũ nằm trong `ml_model/research/` và không được import khi chạy ứng dụng.
@@ -84,7 +95,7 @@ Trang **Sổ cái** và QR truy xuất công khai hiển thị mạng, địa ch
 
 ## Ghi chú
 
-- `LEDGER_MODE=mock` (mặc định) chạy offline; `evm` dùng Hardhat node + `contracts/contracts/FruitChain.sol`. Nếu node mất trạng thái sau crash, backend giữ nguyên DB và báo lỗi contract; không tự seed lại để tránh mất dữ liệu. Cần khôi phục node hoặc chuẩn bị database trình diễn mới một cách chủ động.
+- `LEDGER_MODE=mock` (mặc định) không cần kết nối RPC blockchain; các lớp bản đồ vẫn cần Internet. `evm` dùng Hardhat node + `contracts/contracts/FruitChain.sol` hoặc mạng Avalanche theo cấu hình. Nếu node mất trạng thái sau crash, backend giữ nguyên DB và báo lỗi contract; không tự seed lại để tránh mất dữ liệu. Cần khôi phục node hoặc chuẩn bị database trình diễn mới một cách chủ động.
 - T-RUL: lô FC-2026-006 có 6 reading bị sửa có chủ đích trong `sensor_readings.csv` nên test tính lại RUL của lô này từ nhiệt độ gốc trong `rul_timeseries.csv`; T-VIOL cũng dùng nhiệt độ gốc đó.
 - Contract mở rộng quyền theo ghi chú mục 7: HANDOFF cho mọi bên tham gia, VIOLATION/INSPECTION cho bên tham gia + REGULATOR.
 - Python 3.10+ (spec ghi 3.11; mã tương thích cả hai).
