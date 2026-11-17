@@ -15,7 +15,7 @@ export default function RouteMap({ readings, events }: { readings: any[]; events
   return (
     <div className="h-[420px]">
       <MapContainer bounds={bounds} scrollWheelZoom={false}>
-        <TileLayer attribution='&copy; OpenStreetMap &copy; CARTO' url="https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png" />
+        <TileLayer attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap contributors</a>' url="https://tile.openstreetmap.org/{z}/{x}/{y}.png" />
         <Polyline positions={pts} pathOptions={{ color: "#1a7f93", weight: 4, opacity: 0.85 }} />
         {evs.map((e) => (
           <CircleMarker key={e.eventId} center={[e.lat, e.lon]} radius={8} pathOptions={{ color: "#fff", weight: 2, fillColor: EV_COLOR[e.type] || "#64748b", fillOpacity: 1 }}>

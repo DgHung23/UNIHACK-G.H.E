@@ -12,7 +12,7 @@ export default function FleetMap({ batches, height = 360 }: { batches: any[]; he
   return (
     <div style={{ height }}>
       <MapContainer bounds={bounds} scrollWheelZoom={false}>
-        <TileLayer attribution="&copy; OpenStreetMap &copy; CARTO" url="https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png" />
+        <TileLayer attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap contributors</a>' url="https://tile.openstreetmap.org/{z}/{x}/{y}.png" />
         {pts.map((b) => (
           <CircleMarker key={b.batchId} center={[b.currentLat, b.currentLon]} radius={b.status === "IN_TRANSIT" ? 9 : 7}
             pathOptions={{ color: b.hasViolation ? "#d6453b" : "#ffffff", weight: b.hasViolation ? 3 : 2, fillColor: FRUIT_COLOR[b.fruitId] || "#7f988f", fillOpacity: 0.95 }}>
