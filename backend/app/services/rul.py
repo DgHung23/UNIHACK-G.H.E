@@ -239,13 +239,15 @@ class ImageModelManager:
                 target_path = str(config.DEFAULT_MODEL_DIR)
             s = self.settings
             checkpoint = s.get("checkpoint") or None
+            refresh_paths = target_path != s["path"]
             if target_path != s["path"]:
                 checkpoint = None
             elif checkpoint and not Path(checkpoint).is_file() and (Path(target_path) / "fruitchain_model.json").is_file():
                 checkpoint = None
+                refresh_paths = True
             args = dict(path=target_path, checkpoint=checkpoint, device=s.get("device", "auto"),
                         output_unit=s.get("outputUnit", "auto"), fruits=s.get("fruits"),
-                        use_sensor_inputs=s.get("useSensorInputs", True), persist=False)
+                        use_sensor_inputs=s.get("useSensorInputs", True), persist=refresh_paths)
         elif config.DEFAULT_MODEL_DIR.is_dir():
             args = dict(path=str(config.DEFAULT_MODEL_DIR), checkpoint=config.RUL_MODEL_CHECKPOINT or None, persist=False,
                         fruits=self.settings.get("fruits"), fusion=None)

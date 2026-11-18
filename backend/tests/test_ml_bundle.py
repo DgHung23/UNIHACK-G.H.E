@@ -103,3 +103,27 @@ def test_strawberry_bundle_cannot_be_loaded_for_a_different_fruit():
 def test_missing_selected_checkpoint_does_not_silently_load_default(tmp_path):
     with pytest.raises(FileNotFoundError):
         CustomModel(config.DEFAULT_MODEL_DIR, str(tmp_path / "not-found.pt"))
+
+
+@pytest.mark.parametrize("relative", [False, True])
+def test_startup_refreshes_saved_checkpoint_path_after_bundle_restructure(tmp_path, monkeypatch, relative):
+    settings_file = tmp_path / "model_settings.json"
+    monkeypatch.setattr(config, "MODEL_SETTINGS_FILE", settings_file)
+    monkeypatch.setattr(config, "RUL_MODEL", "")
+    old_checkpoint = Path("artifacts/strawberry/model_d.pt")
+    if not relative:
+        old_checkpoint = config.DEFAULT_MODEL_DIR / old_checkpoint
+    settings_file.write_text(json.dumps({"mode": "custom", "path": str(config.DEFAULT_MODEL_DIR),
+                                         "checkpoint": str(old_checkpoint), "device": "cpu",
+                                         "fruits": ["strawberry"]}), encoding="utf-8")
+    manager = ImageModelManager()
+    try:
+        manager.autoload(None)
+        assert manager.error is None and manager.model is not None
+        expected = str((config.DEFAULT_MODEL_DIR / "weights/strawberry_rul.pt").resolve())
+        assert str(manager.model.checkpoint) == expected
+        assert manager.settings["checkpoint"] == expected
+        assert json.loads(settings_file.read_text(encoding="utf-8"))["checkpoint"] == expected
+    finally:
+        if manager.model is not None:
+            manager.model.unload()
