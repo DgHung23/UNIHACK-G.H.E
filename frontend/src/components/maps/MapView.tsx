@@ -3,7 +3,7 @@ import { latLngBounds, DomEvent, type LatLngTuple } from "leaflet";
 import { MapContainer, Pane, ScaleControl, TileLayer, WMSTileLayer, useMap } from "react-leaflet";
 import { LocateFixed, Map as MapIcon, Maximize2, Minimize2, Minus, Plus, Satellite, Scan, RotateCw } from "lucide-react";
 
-// Public services and layer names are documented in docs/MAP_LAYERS.md.
+// Public map services: NARENCA Vietnam base/labels and Esri World Imagery.
 const VIETNAM_WMS = "https://cache.bando.com.vn/service";
 const IMAGERY = "https://services.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}";
 const VIETNAM_BOUNDS: [LatLngTuple, LatLngTuple] = [[7, 101], [24, 119]];

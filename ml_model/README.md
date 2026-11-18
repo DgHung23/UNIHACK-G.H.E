@@ -24,7 +24,7 @@ ml_model/
 └── research/                  # bản cũ: acquisition, EDA, train, evaluation, API, dữ liệu mẫu
 ```
 
-`research/` là kho tham khảo, không nằm trên đường import của ứng dụng. Giữ lại mã/dữ liệu cũ để không mất tài liệu nghiên cứu. [Phân tích đầy đủ](../docs/ML_ENGINE_ARCHITECTURE.md).
+`research/` là kho tham khảo, không nằm trên đường import của ứng dụng. Giữ lại mã/dữ liệu cũ để không mất tài liệu nghiên cứu. Luồng suy luận và cấu trúc runtime được mô tả bên dưới.
 
 ## Chạy độc lập
 
