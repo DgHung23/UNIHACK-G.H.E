@@ -3,14 +3,14 @@ requires = ["setuptools>=68"]
 build-backend = "setuptools.build_meta"
 
 [project]
-name = "fruitchain-ml"
-version = "1.0.0"
-description = "Inference runtime for FruitChain trained image RUL models"
+name = "strawberry-rul"
+version = "1.1.0"
+description = "Strawberry image RUL inference from a trained MobileNetV2-CBAM-GRU checkpoint"
 requires-python = ">=3.10"
-dependencies = ["torch>=2.6", "torchvision", "numpy", "pillow", "opencv-python"]
+dependencies = ["torch>=2.6", "torchvision", "numpy", "opencv-python"]
 
 [project.scripts]
-fruitchain-predict = "fruitchain_ml.__main__:main"
+strawberry-predict = "strawberry_rul.__main__:main"
 
 [tool.setuptools.packages.find]
 where = ["src"]

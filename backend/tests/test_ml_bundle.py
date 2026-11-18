@@ -14,8 +14,9 @@ from app.services.rul_adapters.custom import CustomModel
 def copy_runtime(destination: Path) -> Path:
     source = config.DEFAULT_MODEL_DIR
     destination.mkdir()
-    shutil.copy2(source / "fruitchain_model.json", destination)
-    for directory in ("src", "configs", "artifacts"):
+    for filename in ("fruitchain_model.json", "config.json"):
+        shutil.copy2(source / filename, destination)
+    for directory in ("src", "weights"):
         shutil.copytree(source / directory, destination / directory, ignore=shutil.ignore_patterns("__pycache__"))
     return destination
 
@@ -35,13 +36,13 @@ def test_bundle_relocates_without_global_imports_and_hashes_inference_code(tmp_p
         assert model.meta["imageSize"] == 224
     finally:
         model.unload()
-    code = relocated / "src/fruitchain_ml/image.py"
+    code = relocated / "src/strawberry_rul/image.py"
     code.write_text(code.read_text(encoding="utf-8") + "\n# provenance regression test\n", encoding="utf-8")
     assert CustomModel(relocated).model_hash() != original.model_hash()
 
 
 def test_checkpoint_with_missing_weights_is_rejected(tmp_path):
-    source = config.DEFAULT_MODEL_DIR / "artifacts/strawberry/model_d.pt"
+    source = config.DEFAULT_MODEL_DIR / "weights/strawberry_rul.pt"
     checkpoint = torch.load(source, map_location="cpu", weights_only=True)
     checkpoint["model_state_dict"].pop(next(iter(checkpoint["model_state_dict"])))
     broken = tmp_path / "missing-layer.pt"
@@ -49,6 +50,24 @@ def test_checkpoint_with_missing_weights_is_rejected(tmp_path):
     model = CustomModel(config.DEFAULT_MODEL_DIR, str(broken), device="cpu")
     try:
         with pytest.raises(RuntimeError, match="Missing key"):
+            model.load()
+    finally:
+        model.unload()
+
+
+@pytest.mark.parametrize("change", [{"model_key": "A"}, {"fusion_mode": "early_concat"}])
+def test_checkpoint_for_another_architecture_is_not_interpreted_as_model_d(tmp_path, change):
+    source = config.DEFAULT_MODEL_DIR / "weights/strawberry_rul.pt"
+    checkpoint = torch.load(source, map_location="cpu", weights_only=True)
+    if "model_key" in change:
+        checkpoint["model_key"] = change["model_key"]
+    else:
+        checkpoint["config"].update(change)
+    incompatible = tmp_path / "incompatible.pt"
+    torch.save(checkpoint, incompatible)
+    model = CustomModel(config.DEFAULT_MODEL_DIR, str(incompatible), device="cpu")
+    try:
+        with pytest.raises(ValueError, match="Only strawberry model D"):
             model.load()
     finally:
         model.unload()

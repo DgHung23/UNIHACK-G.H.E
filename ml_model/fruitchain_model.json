@@ -1,19 +1,18 @@
 {
   "schemaVersion": 1,
   "format": "fruitchain-bundle",
-  "package": "fruitchain_ml",
-  "checkpoint": "artifacts/strawberry/model_d.pt",
-  "config": "configs/strawberry.json",
+  "package": "strawberry_rul",
+  "checkpoint": "weights/strawberry_rul.pt",
+  "config": "config.json",
   "fruits": ["strawberry"],
   "outputUnit": "hours",
   "checkpointSha256": "aa75eb2f1ed19d6b63e22268a94235030f2c029034dc17fea59c738791c98fa7",
   "provenanceFiles": [
-    "src/fruitchain_ml/__init__.py",
-    "src/fruitchain_ml/runtime.py",
-    "src/fruitchain_ml/preprocessing.py",
-    "src/fruitchain_ml/image.py",
-    "src/fruitchain_ml/networks.py",
-    "src/fruitchain_ml/attention.py",
-    "src/fruitchain_ml/specs.py"
+    "src/strawberry_rul/__init__.py",
+    "src/strawberry_rul/runtime.py",
+    "src/strawberry_rul/preprocessing.py",
+    "src/strawberry_rul/image.py",
+    "src/strawberry_rul/model.py",
+    "src/strawberry_rul/attention.py"
   ]
 }

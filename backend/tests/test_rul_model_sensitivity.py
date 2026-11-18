@@ -13,14 +13,14 @@ from conftest import auth
 
 
 def test_bundled_runtime_preserves_preprocessing_and_rul(tmp_path):
-    manifest = json.loads((config.DEFAULT_MODEL_DIR / "samples/manifest.json").read_text(encoding="utf-8"))
+    manifest = json.loads((config.DEFAULT_MODEL_DIR / "examples/reference.json").read_text(encoding="utf-8"))
     model = CustomModel(config.DEFAULT_MODEL_DIR, device="cpu", fruits=["strawberry"]).load()
     try:
         assert model.meta["imageSize"] == 224 and model.meta["seqLen"] == 8
         assert model.meta["checkpointSha256"] == manifest["checkpointSha256"]
         results = {}
         for sample in manifest["samples"]:
-            image = config.DEFAULT_MODEL_DIR / "samples" / sample["path"]
+            image = config.DEFAULT_MODEL_DIR / "examples" / sample["path"]
             assert hashlib.sha256(image.read_bytes()).hexdigest() == sample["imageSha256"]
             prepared, _ = model.preprocess(read_image(image))
             encoded = cv2.imencode(".png", prepared)[1].tobytes()
@@ -44,7 +44,7 @@ def test_model_api_distinguishes_bundled_samples(client):
     assert response.status_code == 200, response.text
     outputs = {}
     for name in ("fresh", "expired"):
-        source = config.DEFAULT_MODEL_DIR / f"samples/strawberry/{name}.png"
+        source = config.DEFAULT_MODEL_DIR / f"examples/{name}.png"
         response = client.post("/api/settings/model/test", headers=headers,
                                files={"file":(source.name, source.read_bytes(), "image/png")})
         assert response.status_code == 200, response.text

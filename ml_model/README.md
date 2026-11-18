@@ -1,64 +1,45 @@
-# FruitChain ML runtime
+# Strawberry RUL Engine
 
-Phần này chỉ **nạp model đã train và suy luận**. Không cần dự án trên Desktop, FastAPI cũ, notebook hoặc pipeline huấn luyện để chạy.
+Engine dự đoán thời gian sử dụng còn lại của **dâu tây**, được tách từ project **Strawberry-RUL-prediction** và tích hợp vào FruitChain. Engine nạp checkpoint đã huấn luyện để xử lý ảnh và suy luận; giữ nguyên trọng số và luồng dự đoán của model gốc.
+
+## Model dự đoán
+
+Model D gồm **MobileNetV2** trích xuất đặc trưng ảnh, **CBAM** tập trung vào đặc trưng quan trọng, **GRU** xử lý chuỗi đặc trưng và lớp hồi quy trả về **RUL theo giờ**. FruitChain chuyển kết quả sang ngày khi hiển thị.
+
+Luồng xử lý: **ảnh dâu tây → tách quả bằng màu và GrabCut → ảnh 224×224, chuẩn hóa ImageNet → model → RUL**. Với một ảnh tải lên, engine lặp cùng ảnh 8 lần theo định dạng đầu vào của checkpoint. Model hiện tại chỉ dùng ảnh; phần RUL cảm biến và hợp nhất kết quả nằm ở backend FruitChain.
+
+## Cấu trúc
 
 ```text
 ml_model/
-├── fruitchain_model.json       # manifest: checkpoint, config, package, file được đưa vào modelHash
-├── pyproject.toml              # package Python fruitchain-ml
-├── requirements.txt            # dependency suy luận
-├── artifacts/strawberry/
-│   └── model_d.pt              # checkpoint gốc; không train lại/đổi trọng số
-├── configs/strawberry.json     # cấu hình tiền xử lý và giá trị dự phòng
-├── samples/
-│   ├── manifest.json           # nguồn ảnh, nhãn, SHA-256, output tham chiếu trước refactor
-│   └── strawberry/             # fresh.png, midlife.png, expired.png
-├── src/fruitchain_ml/
-│   ├── runtime.py              # RulPredictor: load → preprocess → predict_hours
-│   ├── preprocessing.py        # thuật toán phân đoạn di chuyển từ bản cũ
-│   ├── image.py                # đọc ảnh, alpha, resize, ImageNet normalization
-│   ├── networks.py             # kiến trúc A/B/C/D; giữ tên layer tương thích state_dict
-│   ├── attention.py            # CBAM
-│   ├── specs.py                # tên backbone/RNN, không import training config
-│   └── __main__.py             # CLI độc lập
-└── research/                  # bản cũ: acquisition, EDA, train, evaluation, API, dữ liệu mẫu
+├── fruitchain_model.json       # Khai báo bundle để FruitChain nhận diện và nạp
+├── config.json                 # Cấu hình model và xử lý ảnh
+├── weights/
+│   └── strawberry_rul.pt        # Checkpoint model D đã huấn luyện
+├── src/strawberry_rul/
+│   ├── runtime.py              # Nạp checkpoint, tiền xử lý và predict_hours()
+│   ├── model.py                # MobileNetV2 + CBAM + GRU + lớp hồi quy
+│   ├── attention.py            # Channel attention và spatial attention của CBAM
+│   ├── preprocessing.py        # Tách quả, tạo mask và lấy vùng ảnh dâu tây
+│   ├── image.py                # Đọc ảnh, xử lý alpha, resize và chuyển tensor
+│   ├── __main__.py             # Chạy dự đoán bằng dòng lệnh
+│   └── __init__.py
+├── examples/                   # Ba ảnh kiểm tra và kết quả tham chiếu
+├── pyproject.toml              # Package strawberry-rul
+└── requirements.txt
 ```
 
-`research/` là kho tham khảo, không nằm trên đường import của ứng dụng. Giữ lại mã/dữ liệu cũ để không mất tài liệu nghiên cứu. Luồng suy luận và cấu trúc runtime được mô tả bên dưới.
+## Sử dụng
 
-## Chạy độc lập
+Trong FruitChain, mở **Cài đặt model → Model tích hợp → Nạp model**. Khi chọn thư mục, trỏ tới `ml_model/`.
 
-Tại thư mục gốc repo, sau khi cài `backend/requirements.txt` hoặc `ml_model/requirements.txt`:
+Chạy độc lập từ thư mục gốc repository, sau khi cài dependency:
 
 ```powershell
+py -3.10 -m pip install -r ml_model/requirements.txt
 $env:PYTHONPATH = 'ml_model/src'
-py -3.10 -m fruitchain_ml --model-dir ml_model --image ml_model/samples/strawberry/fresh.png --device cpu
+py -3.10 -m strawberry_rul --model-dir ml_model --image ml_model/examples/fresh.png --device cpu
 Remove-Item Env:PYTHONPATH
 ```
 
-Không tạo DB, không seed, không khởi động web, không tải backbone từ Internet. Có thể cài package editable bằng `py -3.10 -m pip install -e ml_model --no-deps` rồi dùng `fruitchain-predict --model-dir ml_model --image PATH`. Khi cài package ở nơi khác, truyền rõ `--model-dir` trỏ tới bundle có artifacts/configs/manifest.
-
-Backend tự nhận diện bundle qua `fruitchain_model.json`. Trang Model AI vẫn cho chọn thư mục/checkpoint khác. Adapter nạp package trong namespace riêng từng lần, không thêm research vào `sys.path`, không cần import tên chung `services` hoặc `training`.
-
-## Hợp đồng suy luận
-
-- Checkpoint D hiện tại: MobileNetV2 + CBAM + GRU; `image_size=224`, `seq_len=8`, `fusion_mode=image_only` theo checkpoint.
-- Input upload: một ảnh; backend tách quả, nền alpha trắng khi chuẩn hóa, RGB/ImageNet. Để tương thích predictor cũ, **lặp cùng frame 8 lần**. Đây không phải 8 quan sát theo thời gian.
-- `predict_hours()` trả RUL giờ sau giải chuẩn hóa target. Backend đổi ngày và chặn giá trị âm; output thô vẫn được giữ trong metadata. NaN/Infinity bị từ chối.
-- Model image-only không sử dụng nhiệt độ/độ ẩm. Q10 và hợp nhất RUL cảm biến/ảnh vẫn thuộc backend, không trộn vào runtime ảnh.
-- Không có confidence/CI được hiệu chuẩn. Không biến điểm sanity cố định 0.9 trong bản cũ thành xác suất tin cậy. Điểm tách quả chỉ mô tả phân đoạn.
-- GrabCut được đặt seed 0 trước mỗi lần preprocess để cùng ảnh có kết quả ổn định. Công thức xử lý ảnh và kiến trúc giữ nguyên, chỉ sửa đường import tương đối.
-- Loader dùng `weights_only=True` và `load_state_dict(strict=True)`; sai kiến trúc hoặc thiếu layer sẽ báo lỗi, không nạp một phần âm thầm.
-
-SHA-256 checkpoint gốc: `aa75eb2f1ed19d6b63e22268a94235030f2c029034dc17fea59c738791c98fa7`.
-
-`modelHash` của bundle bao gồm checkpoint, config, manifest và code suy luận. Di chuyển thư mục không đổi hash; thay code/config đổi hash. Vì phạm vi băm mở rộng, modelVersion mới khác bản legacy dù trọng số không đổi. Các sự kiện lịch sử giữ nguyên version/hash cũ.
-
-## Kiểm thử
-
-```powershell
-cd backend
-py -3.10 -m pytest tests/test_ml_bundle.py tests/test_rul_model_sensitivity.py tests/test_m1b_images.py
-```
-
-Test đối chiếu SHA-256 ảnh/ảnh preprocess, output CPU với ba mẫu trước refactor, tính độc lập khi chuyển bundle, provenance khi đổi code, checkpoint thiếu layer, tải ảnh qua API và lựa chọn tắt model qua lần khởi động. Nhãn và output tham chiếu trong sample manifest là dữ liệu hồi quy, không phải bộ đánh giá độ chính xác mô hình.
+Engine trả `rulHours`, `rulDays` và thông tin checkpoint. `examples/reference.json` lưu mã băm ảnh, ảnh sau tiền xử lý và đầu ra tham chiếu để kiểm tra tính nhất quán khi thay đổi mã nguồn. `modelHash` của FruitChain bao gồm trọng số, cấu hình và mã suy luận.

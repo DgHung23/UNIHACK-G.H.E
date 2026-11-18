@@ -25,8 +25,8 @@ def synthetic_jpg() -> bytes:
 
 def sample_image() -> bytes:
     for base in (MODEL_DIR, getattr(config, "DEFAULT_MODEL_DIR", None)):
-        if base and (base / "samples/strawberry/fresh.png").is_file():
-            return (base / "samples/strawberry/fresh.png").read_bytes()
+        if base and (base / "examples/fresh.png").is_file():
+            return (base / "examples/fresh.png").read_bytes()
         if base and (base / "data").is_dir():
             imgs = sorted((base / "data").rglob("*.png"))
             if imgs:

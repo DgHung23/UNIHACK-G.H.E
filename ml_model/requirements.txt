@@ -1,5 +1,4 @@
 torch>=2.6
 torchvision
 numpy
-pillow
 opencv-python

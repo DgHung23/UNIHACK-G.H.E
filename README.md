@@ -78,7 +78,7 @@ fruitchain/
 ├── frontend/       # Dashboard, quản lý lô, bản đồ và trang truy xuất
 ├── backend/        # API, xác thực, dữ liệu cảm biến, RUL và tích hợp blockchain
 ├── contracts/      # Smart contract Solidity, script triển khai và kiểm thử
-├── ml_model/       # Runtime suy luận, checkpoint, cấu hình và mã nghiên cứu
+├── ml_model/       # Engine dự đoán RUL dâu tây, checkpoint, cấu hình và ảnh mẫu
 ├── demo_data/      # Dữ liệu khởi tạo ứng dụng
 ├── tools/          # Công cụ kiểm tra tính toàn vẹn dữ liệu
 └── run.ps1         # Khởi động ứng dụng trên Windows

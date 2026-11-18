@@ -1,0 +1,16 @@
+{
+  "model": {
+    "key": "D",
+    "seq_len": 8,
+    "image_size": 224,
+    "hidden_size": 160,
+    "dropout": 0.25,
+    "backbone_dropout": 0.1
+  },
+  "preprocessing": {
+    "crop_width": null,
+    "crop_height": null,
+    "min_strawberry_area_ratio": 0.0003,
+    "min_mask_pixels": 300
+  }
+}
